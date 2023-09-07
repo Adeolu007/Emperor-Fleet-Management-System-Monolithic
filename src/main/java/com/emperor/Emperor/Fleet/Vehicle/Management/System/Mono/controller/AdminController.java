@@ -2,10 +2,9 @@ package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.DriverInfo;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.FuelRecordResponse;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.MaintenanceTaskResponseDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.VehicleRegistration;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.DriverService;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.FuelService;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.VehicleService;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -17,13 +16,14 @@ public class AdminController {
     private final DriverService driverService;
     private final VehicleService vehicleService;
     private final FuelService fuelService;
-    @Autowired
-    public AdminController(DriverService driverService, VehicleService vehicleService,FuelService fuelService) {
-        this.driverService = driverService;
-        this.vehicleService=vehicleService;
-        this.fuelService = fuelService;
-    }
+    private final MaintenanceRepairService maintenanceRepairService;
 
+    public AdminController(DriverService driverService, VehicleService vehicleService, FuelService fuelService, MaintenanceRepairService maintenanceRepairService) {
+        this.driverService = driverService;
+        this.vehicleService = vehicleService;
+        this.fuelService = fuelService;
+        this.maintenanceRepairService = maintenanceRepairService;
+    }
 
     @GetMapping
     public ResponseEntity<List<DriverInfo>> getAllDrivers() {
@@ -61,5 +61,27 @@ public class AdminController {
     public ResponseEntity<Double> calculateFuelEfficiency(@PathVariable String licensePlate) {
         double fuelEfficiency = fuelService.calculateFuelEfficiency(licensePlate);
         return ResponseEntity.ok(fuelEfficiency);
+    }
+
+    //get all repair method
+    @GetMapping("/all-repair")
+    public ResponseEntity<List<MaintenanceTaskResponseDto>> getAllRepairRecords() {
+        return maintenanceRepairService.getAllRepairRecords();
+    }
+
+    //get all repair by license plate
+    //this endpoint is not working *********************************************************
+    @GetMapping("/by-license-plate/{licensePlate}")
+    public ResponseEntity<List<MaintenanceTaskResponseDto>> getRepairRecordsByLicensePlate(String licensePlate) {
+        return maintenanceRepairService.getRepairRecordsByLicensePlate(licensePlate);
+    }
+
+
+    //delete repair record
+    //not working **********************
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<String> deleteRepairRecord(@PathVariable long id) {
+        return maintenanceRepairService.deleteRepairRecord(id);
     }
 }

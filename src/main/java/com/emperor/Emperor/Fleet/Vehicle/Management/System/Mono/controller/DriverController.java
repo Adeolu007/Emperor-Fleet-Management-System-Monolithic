@@ -57,4 +57,10 @@ public class DriverController {
     public ResponseEntity<String> createMaintenanceTask(@RequestBody MaintenanceRepairRequest maintenanceRepairRequest){
         return maintenanceRepairService.createMaintenanceTask(maintenanceRepairRequest) ;
     }
+
+    //update repair
+    @PutMapping ("/update-repair")
+    public ResponseEntity<String> updateRepairRecord(@RequestBody UpdateMaintenanceRepairRequest updateMaintenanceRepairRequest) {
+        return maintenanceRepairService.updateRepairRecord(updateMaintenanceRepairRequest);
+    }
 }

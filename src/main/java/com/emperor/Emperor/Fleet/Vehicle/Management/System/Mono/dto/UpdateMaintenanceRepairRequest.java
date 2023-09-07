@@ -9,9 +9,10 @@ import java.time.LocalDate;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class MaintenanceTaskResponseDto {
+public class UpdateMaintenanceRepairRequest {
+    private long id;
     private String vehicleLicensePlate;
     private String description;
-    private BigDecimal cost;
     private LocalDate scheduledDate;
+    private BigDecimal cost;
 }
