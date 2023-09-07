@@ -18,11 +18,12 @@ public class Reservation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String vehicle;
-    private String driver;
     private LocalDate date;
     private LocalTime startTime;
     private LocalTime endTime;
     private String purpose;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "vehicle_id")
+    private Vehicle vehicle;
 
 }

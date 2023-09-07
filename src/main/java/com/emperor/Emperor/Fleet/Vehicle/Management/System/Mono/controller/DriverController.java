@@ -1,10 +1,7 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.DriverService;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.FuelService;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.MaintenanceRepairService;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.VehicleService;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,11 +15,14 @@ public class DriverController {
     private final FuelService fuelService;
     private final MaintenanceRepairService maintenanceRepairService;
 
-    public DriverController(DriverService driverService, VehicleService vehicleService, FuelService fuelService, MaintenanceRepairService maintenanceRepairService) {
+    private final ReservationService reservationService;
+
+    public DriverController(DriverService driverService, VehicleService vehicleService, FuelService fuelService, MaintenanceRepairService maintenanceRepairService, ReservationService reservationService) {
         this.driverService = driverService;
         this.vehicleService = vehicleService;
         this.fuelService = fuelService;
         this.maintenanceRepairService = maintenanceRepairService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping("/{licenseNumber}")
@@ -62,5 +62,11 @@ public class DriverController {
     @PutMapping ("/update-repair")
     public ResponseEntity<String> updateRepairRecord(@RequestBody UpdateMaintenanceRepairRequest updateMaintenanceRepairRequest) {
         return maintenanceRepairService.updateRepairRecord(updateMaintenanceRepairRequest);
+    }
+
+    //create reservation
+    @PostMapping("/reservation")
+    public ResponseEntity<ReservationResponseDto> createReservation(@RequestBody ReservationDto reservationDto){
+        return reservationService.createReservation(reservationDto);
     }
 }

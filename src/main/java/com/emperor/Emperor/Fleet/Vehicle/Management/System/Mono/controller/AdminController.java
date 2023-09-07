@@ -1,9 +1,6 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.DriverInfo;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.FuelRecordResponse;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.MaintenanceTaskResponseDto;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.VehicleRegistration;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +14,14 @@ public class AdminController {
     private final VehicleService vehicleService;
     private final FuelService fuelService;
     private final MaintenanceRepairService maintenanceRepairService;
+    private final ReservationService reservationService;
 
-    public AdminController(DriverService driverService, VehicleService vehicleService, FuelService fuelService, MaintenanceRepairService maintenanceRepairService) {
+    public AdminController(DriverService driverService, VehicleService vehicleService, FuelService fuelService, MaintenanceRepairService maintenanceRepairService, ReservationService reservationService) {
         this.driverService = driverService;
         this.vehicleService = vehicleService;
         this.fuelService = fuelService;
         this.maintenanceRepairService = maintenanceRepairService;
+        this.reservationService = reservationService;
     }
 
     @GetMapping
@@ -83,5 +82,17 @@ public class AdminController {
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<String> deleteRepairRecord(@PathVariable long id) {
         return maintenanceRepairService.deleteRepairRecord(id);
+    }
+
+    //get all reservations
+    @GetMapping("/all-reservations")
+    public ResponseEntity<List<ReservationResponseDto>> getAllReservations() {
+        return reservationService.getAllReservations();
+    }
+
+    //get reservation
+    @GetMapping("/reservation/{reservationId}")
+    public ResponseEntity<ReservationResponseDto> getReservationById(@PathVariable Long reservationId) {
+        return reservationService.getReservationById(reservationId);
     }
 }
