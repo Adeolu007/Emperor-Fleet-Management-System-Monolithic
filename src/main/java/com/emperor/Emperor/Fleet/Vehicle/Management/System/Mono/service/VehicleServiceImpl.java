@@ -1,5 +1,7 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
+//import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.RabbitMq.RabbitMQJsonProducer;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.EmailDetails;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RegisteredVehicleDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.UpdateVehicle;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.VehicleRegistration;
@@ -18,10 +20,22 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class VehicleServiceImpl implements VehicleService{
-    @Autowired
+    //@Autowired
     private VehicleRepository vehicleRepository;
-    @Autowired
+    //@Autowired
     private DriverRepository driverRepository;
+  //  @Autowired
+//    private RabbitMQJsonProducer rabbitMQProducer;
+
+    public VehicleServiceImpl(VehicleRepository vehicleRepository,
+                              DriverRepository driverRepository
+                          //    RabbitMQJsonProducer rabbitMQProducer
+    ) {
+        this.vehicleRepository = vehicleRepository;
+        this.driverRepository = driverRepository;
+      //  this.rabbitMQProducer = rabbitMQProducer;
+    }
+
     @Override
     public ResponseEntity<String> registerNewVehicle(VehicleRegistration vehicleRegistration) {
     if(vehicleRepository.existsByLicensePlate(vehicleRegistration.getLicensePlate())){
@@ -42,6 +56,13 @@ public class VehicleServiceImpl implements VehicleService{
                 .build();
 
         vehicleRepository.save(newVehicle);
+        EmailDetails emailDetails = new EmailDetails();
+        emailDetails.setRecipient(newVehicle.getEmail());
+        emailDetails.setSubject("NeoClan Tech Transaction Alert [Credit : ]");
+        emailDetails.setMessageBody("Credit transaction of  has been performed on your account. Your new account balance is " );
+//    kafkaTemplate.send("notificationTopic", emailDetails);
+
+      //  rabbitMQProducer.sendJsonMessage(emailDetails);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Vehicle with License Plate " + vehicleRegistration.getLicensePlate() + " has been registered");
 
@@ -81,13 +102,13 @@ public class VehicleServiceImpl implements VehicleService{
     }
 
     @Override
-    public ResponseEntity<String> deleteVehicle(Long licensePlate) {
-      //  if (!vehicleRepository.existsByLicensePlate(licensePlate))
-        if (!vehicleRepository.existsById(licensePlate)) {
+    public ResponseEntity<String> deleteVehicle(String licensePlate) {
+        if (!vehicleRepository.existsByLicensePlate(licensePlate)){
+      //  if (!vehicleRepository.existsById(licensePlate)) {
             throw new VehicleNotFoundException("This vehicle does not exist");
         }
-        //vehicleRepository.deleteByLicensePlate(licensePlate);
-        vehicleRepository.deleteById(licensePlate);
+        vehicleRepository.deleteByLicensePlate(licensePlate);
+        //vehicleRepository.deleteById(licensePlate);
         return ResponseEntity.ok("Vehicle with License Plate " + licensePlate + " has been deleted");
 
     }
@@ -113,8 +134,4 @@ public class VehicleServiceImpl implements VehicleService{
 
     }
 
-    @Override
-    public ResponseEntity<Boolean> doesVehicleExist(String licensePlate) {
-        return null;
-    }
 }

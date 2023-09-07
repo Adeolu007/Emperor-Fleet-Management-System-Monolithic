@@ -8,8 +8,8 @@ import org.springframework.http.ResponseEntity;
 public interface VehicleService {
     ResponseEntity<String> registerNewVehicle(VehicleRegistration vehicleRegistration);
     ResponseEntity<RegisteredVehicleDto> findByLicensePlate(String licensePlate);
-    ResponseEntity<String> deleteVehicle(Long licensePlate);
+    ResponseEntity<String> deleteVehicle(String licensePlate);
     ResponseEntity<RegisteredVehicleDto> updateVehicle(UpdateVehicle updateVehicle);
-    ResponseEntity<Boolean> doesVehicleExist (String licensePlate);
+
 
 }

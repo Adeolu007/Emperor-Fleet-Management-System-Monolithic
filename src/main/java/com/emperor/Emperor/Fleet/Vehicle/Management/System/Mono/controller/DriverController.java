@@ -2,6 +2,7 @@ package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.DriverService;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.FuelService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.VehicleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,11 +14,13 @@ public class DriverController {
 
     private final DriverService driverService;
     private final VehicleService vehicleService;
+    private final FuelService fuelService;
 
     @Autowired
-    public DriverController(DriverService driverService,VehicleService vehicleService) {
+    public DriverController(DriverService driverService,VehicleService vehicleService, FuelService fuelService) {
         this.driverService = driverService;
         this.vehicleService =vehicleService;
+        this.fuelService = fuelService;
     }
 
     @GetMapping("/{licenseNumber}")
@@ -39,5 +42,11 @@ public class DriverController {
     @PutMapping("/update")
     public ResponseEntity<RegisteredVehicleDto> updateVehicle(@RequestBody UpdateVehicle updateVehicle) {
         return vehicleService.updateVehicle(updateVehicle);
+    }
+
+    //add fuel
+    @PostMapping("/add")
+    public ResponseEntity<FuelRecordResponse> addFuelRecord(@RequestBody FuelRecordDto fuelRecordDto) {
+        return fuelService.addFuelRecord(fuelRecordDto);
     }
 }
