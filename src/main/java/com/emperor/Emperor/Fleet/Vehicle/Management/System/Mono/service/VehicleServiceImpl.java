@@ -24,16 +24,15 @@ public class VehicleServiceImpl implements VehicleService{
     private VehicleRepository vehicleRepository;
     //@Autowired
     private DriverRepository driverRepository;
+    private EmailService emailService;
   //  @Autowired
 //    private RabbitMQJsonProducer rabbitMQProducer;
 
-    public VehicleServiceImpl(VehicleRepository vehicleRepository,
-                              DriverRepository driverRepository
-                          //    RabbitMQJsonProducer rabbitMQProducer
-    ) {
+
+    public VehicleServiceImpl(VehicleRepository vehicleRepository, DriverRepository driverRepository, EmailService emailService) {
         this.vehicleRepository = vehicleRepository;
         this.driverRepository = driverRepository;
-      //  this.rabbitMQProducer = rabbitMQProducer;
+        this.emailService = emailService;
     }
 
     @Override
@@ -61,7 +60,7 @@ public class VehicleServiceImpl implements VehicleService{
         emailDetails.setSubject("NeoClan Tech Transaction Alert [Credit : ]");
         emailDetails.setMessageBody("Credit transaction of  has been performed on your account. Your new account balance is " );
 //    kafkaTemplate.send("notificationTopic", emailDetails);
-
+        emailService.sendSimpleMail(emailDetails);
       //  rabbitMQProducer.sendJsonMessage(emailDetails);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Vehicle with License Plate " + vehicleRegistration.getLicensePlate() + " has been registered");

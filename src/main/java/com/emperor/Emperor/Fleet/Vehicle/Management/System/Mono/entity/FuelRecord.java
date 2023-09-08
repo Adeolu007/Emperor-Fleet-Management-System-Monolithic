@@ -21,7 +21,7 @@ public class FuelRecord {
     private double litersFilled;
     private double costPerLiter;
     private double totalCost;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 }

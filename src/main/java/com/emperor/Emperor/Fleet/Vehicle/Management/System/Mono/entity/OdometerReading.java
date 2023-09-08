@@ -19,7 +19,7 @@ public class OdometerReading {
     private LocalDate date;
     private double distance; // Distance covered in kilometers
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 }

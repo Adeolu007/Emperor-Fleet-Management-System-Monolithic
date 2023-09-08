@@ -19,7 +19,7 @@ public class MaintenanceRepair {
     private String description;
     private LocalDate scheduledDate;
     private BigDecimal cost;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 }

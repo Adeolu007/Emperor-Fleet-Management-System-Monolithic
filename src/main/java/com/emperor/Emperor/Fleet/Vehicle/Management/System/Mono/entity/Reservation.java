@@ -22,7 +22,7 @@ public class Reservation {
     private LocalTime startTime;
     private LocalTime endTime;
     private String purpose;
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 

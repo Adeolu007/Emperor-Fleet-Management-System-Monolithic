@@ -58,4 +58,7 @@ public class DriverEntity {
     )
     private Set<RoleEntity> roles;
 
+//    @OneToMany(mappedBy = "driver" )
+//    private Vehicle vehicle;
+
 }

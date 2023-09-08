@@ -40,8 +40,8 @@ public class Vehicle {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date acquisitionDate;
 
-    @ManyToOne
-    @JoinColumn(name = "driver_id") // Establish a Many-to-One relationship with drivers
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinColumn(name = "driver_id")
     private DriverEntity driver;
 
     @Column(name = "description")
@@ -52,4 +52,15 @@ public class Vehicle {
     private String email;
 
     private String firstName;
+//    @OneToMany(mappedBy = "vehicle" )
+//    private FuelRecord fuelRecord;
+//
+//    @OneToMany(mappedBy = "vehicle" )
+//    private MaintenanceRepair maintenanceRepair;
+//
+//    @OneToMany(mappedBy = "vehicle" )
+//    private OdometerReading odometerReading;
+//
+//    @OneToMany(mappedBy = "vehicle" )
+//    private Reservation reservation;
 }
