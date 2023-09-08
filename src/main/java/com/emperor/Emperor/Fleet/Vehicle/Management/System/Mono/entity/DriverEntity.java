@@ -8,7 +8,9 @@ import jakarta.validation.constraints.Pattern;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 @Getter
@@ -58,7 +60,7 @@ public class DriverEntity {
     )
     private Set<RoleEntity> roles;
 
-//    @OneToMany(mappedBy = "driver" )
-//    private Vehicle vehicle;
+    @OneToMany(mappedBy = "driver",cascade = CascadeType.REMOVE, orphanRemoval = true )
+    private List<Vehicle> vehicle = new ArrayList<>();;
 
 }

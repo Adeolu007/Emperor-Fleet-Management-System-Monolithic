@@ -6,7 +6,9 @@ import jakarta.validation.constraints.Email;
 import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Getter
 @Setter
@@ -52,15 +54,15 @@ public class Vehicle {
     private String email;
 
     private String firstName;
-//    @OneToMany(mappedBy = "vehicle" )
-//    private FuelRecord fuelRecord;
-//
-//    @OneToMany(mappedBy = "vehicle" )
-//    private MaintenanceRepair maintenanceRepair;
-//
-//    @OneToMany(mappedBy = "vehicle" )
-//    private OdometerReading odometerReading;
-//
-//    @OneToMany(mappedBy = "vehicle" )
-//    private Reservation reservation;
+    @OneToMany(mappedBy = "vehicle",cascade = CascadeType.REMOVE, orphanRemoval = true )
+    private List<FuelRecord> fuelRecord = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vehicle",cascade = CascadeType.REMOVE, orphanRemoval = true )
+    private List<MaintenanceRepair> maintenanceRepair= new ArrayList<>();
+
+    @OneToMany(mappedBy = "vehicle" ,cascade = CascadeType.REMOVE, orphanRemoval = true )
+    private List<OdometerReading> odometerReading = new ArrayList<>();
+
+    @OneToMany(mappedBy = "vehicle",cascade = CascadeType.REMOVE, orphanRemoval = true )
+    private List<Reservation> reservation= new ArrayList<>();
 }
