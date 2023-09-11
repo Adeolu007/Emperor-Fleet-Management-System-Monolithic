@@ -20,7 +20,6 @@ public class Vehicle {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Column(name = "make")
     private String make;
 
@@ -29,16 +28,10 @@ public class Vehicle {
 
     @Column(name = "Licence_plate")
     private String licensePlate;
-
     @Column(name = "year")
     private int year;
-//
-//    @Column(name = "registration_number")
-//    private String registrationNumber;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date registrationDate;
-
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date acquisitionDate;
 

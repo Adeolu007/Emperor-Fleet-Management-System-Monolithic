@@ -5,6 +5,7 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.LoginDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RegisterDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.DriverEntity;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.RoleEntity;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Status;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.DriverRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.RoleRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.security.config.JwtTokenProvider;
@@ -59,6 +60,7 @@ public class AuthServiceImpl implements AuthService {
                 .email(registerDto.getEmail())
                 .licenseNumber(ResponseUtils.generateLicenceNumber(ResponseUtils.lengthOfLicenceNumber))
                 .password(passwordEncoder.encode(registerDto.getPassword()))
+                .status(Status.ACTIVE)
                 .roles(Collections.singleton(role))
                 .build();
 

@@ -15,12 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Collections;
 
 @RestController
-@RequestMapping("api/v1/auth")
+@RequestMapping("/api/v1/auth")
 @AllArgsConstructor
 public class AuthController {
     private AuthService authService;
 
-    @PostMapping("/register")
+    @PostMapping("register")
     public ResponseEntity<?> register(@RequestBody RegisterDto registerDto){
         return new ResponseEntity<>(authService.register(registerDto), HttpStatus.CREATED);
     }

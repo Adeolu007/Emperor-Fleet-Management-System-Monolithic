@@ -23,7 +23,6 @@ import java.util.Set;
         @UniqueConstraint(columnNames = "username"),
         @UniqueConstraint(columnNames = "email")
 })
-@Data
 public class DriverEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -52,6 +51,8 @@ public class DriverEntity {
     private String phoneNumber;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dateOfBirth;
+    @Enumerated(EnumType.STRING)
+    private Status status;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinTable(name = "user_roles",

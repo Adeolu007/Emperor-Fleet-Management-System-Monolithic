@@ -101,7 +101,7 @@ public class SecurityConfig {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(authorize ->
                         authorize
-                                .requestMatchers("/api/v1/auth/**").permitAll()
+//                                .requestMatchers("/api/v1/auth/**").permitAll()
                                 .requestMatchers("/api/v1/auth/register").permitAll()
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/drivers/**").permitAll()

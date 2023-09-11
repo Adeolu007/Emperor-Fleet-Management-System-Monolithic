@@ -1,18 +1,15 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
-//import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.RabbitMq.RabbitMQJsonProducer;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.EmailDetails;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RegisteredVehicleDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.UpdateVehicle;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.VehicleRegistration;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Vehicle;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.DriverNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.VehicleAlreadyExistException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.VehicleNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.DriverRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
@@ -20,14 +17,9 @@ import org.springframework.stereotype.Service;
 @Service
 @Slf4j
 public class VehicleServiceImpl implements VehicleService{
-    //@Autowired
     private VehicleRepository vehicleRepository;
-    //@Autowired
     private DriverRepository driverRepository;
     private EmailService emailService;
-  //  @Autowired
-//    private RabbitMQJsonProducer rabbitMQProducer;
-
 
     public VehicleServiceImpl(VehicleRepository vehicleRepository, DriverRepository driverRepository, EmailService emailService) {
         this.vehicleRepository = vehicleRepository;
@@ -59,9 +51,7 @@ public class VehicleServiceImpl implements VehicleService{
         emailDetails.setRecipient(newVehicle.getEmail());
         emailDetails.setSubject("NeoClan Tech Transaction Alert [Credit : ]");
         emailDetails.setMessageBody("Credit transaction of  has been performed on your account. Your new account balance is " );
-//    kafkaTemplate.send("notificationTopic", emailDetails);
         emailService.sendSimpleMail(emailDetails);
-      //  rabbitMQProducer.sendJsonMessage(emailDetails);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body("Vehicle with License Plate " + vehicleRegistration.getLicensePlate() + " has been registered");
 
