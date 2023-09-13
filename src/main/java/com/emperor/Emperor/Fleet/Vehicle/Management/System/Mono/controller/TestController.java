@@ -1,20 +1,37 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ApiResponse;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RoleRequest;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RoleResponse;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.RoleService;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
+import lombok.AllArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/v1/testing")
+@AllArgsConstructor
+@RequestMapping("api/v1/role")
 public class TestController {
+    private final RoleService roleService;
 
-    @GetMapping
-    public String sayHello(){
-        return "Welcome to our class";
+    @PostMapping
+    public ResponseEntity<ApiResponse<RoleResponse>> addRole(@RequestBody RoleRequest request){
+        RoleResponse role = roleService.addRole(request);
+        ApiResponse<RoleResponse> ar = new ApiResponse<>(HttpStatus.CREATED);
+        ar.setMessage(ResponseUtils.SUCCESS_MESSAGE);
+        ar.setData(role);
+        return new ResponseEntity<>(ar,ar.getStatus());
     }
 
-    @GetMapping("/calculate")
-    public String calculate(){
-        return String.valueOf(2 + 2);
+    @DeleteMapping
+    public ResponseEntity<ApiResponse<Void>> deleteRole(@RequestParam(name = "id") Long id) {
+        roleService.deleteRole(id);
+        ApiResponse<Void> ar = new ApiResponse<>(HttpStatus.CREATED);
+        ar.setMessage(ResponseUtils.USER_DELETED_MESSAGE);
+        ar.setData(null);
+        return new ResponseEntity<>(ar,ar.getStatus());
     }
+
 }
