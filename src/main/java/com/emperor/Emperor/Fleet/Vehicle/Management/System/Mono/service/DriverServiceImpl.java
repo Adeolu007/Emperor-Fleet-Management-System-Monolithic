@@ -2,11 +2,13 @@ package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.DriverInfo;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.DriverRegistration;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ResponseDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.DriverEntity;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Status;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.DriverNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.DriversNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.DriverRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -22,12 +24,17 @@ public class DriverServiceImpl implements DriverService{
     @Autowired
     private DriverRepository driverRepository;
     @Override
-    public ResponseEntity<DriverInfo> getDriverByLicenseNumber(String licenseNumber) {
+    public ResponseEntity<ResponseDto> getDriverByLicenseNumber(String licenseNumber) {
         if (!driverRepository.existsByLicenseNumber(licenseNumber)) {
-            throw new DriverNotFoundException("Driver with license number " + licenseNumber + " not found");
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.DRIVER_DOES_NOT_EXIST_CODE)
+                    .responseMessage(ResponseUtils.DRIVER_DOES_NOT_EXIST_MESSAGE)
+
+                    .build());
+            //throw new DriverNotFoundException("Driver with license number " + licenseNumber + " not found");
         }
 
-        DriverEntity driverProfile = driverRepository.findByLicenseNumber(licenseNumber);
+        DriverEntity driverProfile = driverRepository.findByLicenseNumber(licenseNumber).orElseThrow();
         DriverInfo driver = DriverInfo.builder()
                 .firstName(driverProfile.getFirstName())
                 .lastName(driverProfile.getLastName())
@@ -35,7 +42,12 @@ public class DriverServiceImpl implements DriverService{
                 .email(driverProfile.getEmail())
                 .build();
 
-        return new ResponseEntity<>(driver, HttpStatus.FOUND);
+
+        return ResponseEntity.ok(ResponseDto.builder()
+                .responseCode(ResponseUtils.DRIVER_FOUND_CODE)
+                .responseMessage(ResponseUtils.DRIVER_FOUND_MESSAGE)
+                .responseBody(driver.getFirstName() + " " + driver.getLastName() +  " with license number " + driver.getLicenseNumber() + "and email address " + driver.getEmail() + " is a driver at Emperor Fleet Management System")
+                .build());
     }
 
 
@@ -75,12 +87,15 @@ public class DriverServiceImpl implements DriverService{
     }
 
     @Override
-    public ResponseEntity<DriverInfo> updateDriver(DriverRegistration driverRegistration) {
-        DriverEntity driverProfile = driverRepository.findByLicenseNumber(driverRegistration.getLicenseNumber());
+    public ResponseEntity<ResponseDto> updateDriver(DriverRegistration driverRegistration) {
+        DriverEntity driverProfile = driverRepository.findByLicenseNumber(driverRegistration.getLicenseNumber()).orElseThrow();
 
         if (driverProfile == null) {
-            throw new DriverNotFoundException("Driver with license number " + driverRegistration.getLicenseNumber() + " not found");
-        }
+
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.DRIVER_DOES_NOT_EXIST_CODE)
+                    .responseMessage(ResponseUtils.DRIVER_DOES_NOT_EXIST_MESSAGE)
+                    .build());  }
 
         driverProfile.setFirstName(driverRegistration.getFirstName());
         driverProfile.setLastName(driverRegistration.getLastName());
@@ -93,22 +108,30 @@ public class DriverServiceImpl implements DriverService{
         driverProfile.setPhoneNumber(driverRegistration.getPhoneNumber());
         driverRepository.save(driverProfile);
 
-        return ResponseEntity.ok(DriverInfo.builder()
-                .firstName(driverProfile.getFirstName())
-                .lastName(driverProfile.getLastName())
-                .licenseNumber(driverProfile.getLicenseNumber())
-                .email(driverProfile.getEmail())
+        return ResponseEntity.ok(ResponseDto.builder()
+                .responseCode(ResponseUtils.DRIVER_UPDATED_CODE)
+                .responseMessage(ResponseUtils.DRIVER_UPDATED_MESSAGE)
+                .responseBody("Driver with license number " + driverProfile.getLicenseNumber() + " has been updated")
                 .build());
     }
     @Override
-    public ResponseEntity<String> deleteDriver(String licenseNumber) {
-        DriverEntity driverToDelete = driverRepository.findByLicenseNumber(licenseNumber);
+    public ResponseEntity<ResponseDto> deleteDriver(String licenseNumber) {
+        DriverEntity driverToDelete = driverRepository.findByLicenseNumber(licenseNumber).orElseThrow();
         if (driverToDelete == null || driverToDelete.getStatus()==NOT_ACTIVE) {
-            throw new DriverNotFoundException("Driver with license number " + licenseNumber + " not found");
-        }
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.DRIVER_DOES_NOT_EXIST_CODE)
+                    .responseMessage(ResponseUtils.DRIVER_DOES_NOT_EXIST_MESSAGE)
+                    .build());  }
+
+          //  throw new DriverNotFoundException("Driver with license number " + licenseNumber + " not found");
+
 
         driverToDelete.setStatus(NOT_ACTIVE);
         driverRepository.save(driverToDelete);
-        return ResponseEntity.ok("Driver with license number " + licenseNumber + " has been deleted");
+        return ResponseEntity.ok(ResponseDto.builder()
+                .responseCode(ResponseUtils.DRIVER_DELETED_CODE)
+                .responseMessage(ResponseUtils.DRIVER_DELETED_MESSAGE)
+                .responseBody("Driver with license number " + driverToDelete.getLicenseNumber()+ " has been deleted")
+                .build());
     }
 }

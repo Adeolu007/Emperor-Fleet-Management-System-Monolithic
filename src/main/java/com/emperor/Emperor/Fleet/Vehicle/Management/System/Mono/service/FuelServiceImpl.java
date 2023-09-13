@@ -2,6 +2,7 @@ package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.FuelRecordDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.FuelRecordResponse;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ResponseDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.FuelRecord;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.OdometerReading;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.FuelRecordsNotFoundException;
@@ -9,6 +10,7 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.Vehicl
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.FuelRecordRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.OdometerReadingRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,9 +30,14 @@ public class FuelServiceImpl implements FuelService {
     private VehicleRepository vehicleRepository;
 
     @Override
-    public ResponseEntity<FuelRecordResponse> addFuelRecord(FuelRecordDto fuelRecordDto) {
+    public ResponseEntity<ResponseDto> addFuelRecord(FuelRecordDto fuelRecordDto) {
         if(!vehicleRepository.existsByLicensePlate(fuelRecordDto.getLicensePlate())){
-            throw new VehicleNotFoundException("This vehicle does not exist");
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.VEHICLE_DOES_NOT_EXIST_CODE)
+                    .responseMessage(ResponseUtils.VEHICLE_DOES_NOT_EXIST_MESSAGE)
+                    .responseBody("Sorry, this vehicle does not exist")
+                    .build());
+//            throw new VehicleNotFoundException("This vehicle does not exist");
         }
         double totalCost = fuelRecordDto.getLitersFilled() * fuelRecordDto.getCostPerLiter();
 
@@ -50,7 +57,11 @@ public class FuelServiceImpl implements FuelService {
                 .totalCost(totalCost)
                 .build();
 
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedFuelRecord);
+        return ResponseEntity.ok(ResponseDto.builder()
+                .responseCode(ResponseUtils.FUEL_RECORD_CREATION_CODE)
+                .responseMessage(ResponseUtils.FUEL_RECORD_CREATION_MESSAGE)
+                .responseBody("A new fuel record has successfully been created for vehicle with Licence Plate " + fuelRecord.getVehicle().getLicensePlate())
+                .build());
 
     }
 

@@ -106,6 +106,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/drivers/**").permitAll()
                                 .requestMatchers("/api/admin/**").permitAll()
+                                .requestMatchers("/api/admin/change-driver/**").permitAll()
                                 .requestMatchers(UNSECURED_ATTENDEE_END_POINTS).permitAll()
                                 .requestMatchers(UNSECURED_ADMIN_END_POINTS).permitAll()
                                 .requestMatchers(SECURED_ADMIN_END_POINTS).hasRole("ADMIN")

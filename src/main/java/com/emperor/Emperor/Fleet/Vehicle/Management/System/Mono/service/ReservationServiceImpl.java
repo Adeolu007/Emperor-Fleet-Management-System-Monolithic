@@ -1,20 +1,19 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RegisteredVehicleDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ReservationDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ReservationResponseDto;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ResponseDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Reservation;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.CustomReservationException;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.RepairRecordNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.ReservationNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.VehicleNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.ReservationRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -65,15 +64,27 @@ public class ReservationServiceImpl implements ReservationService {
 //                    .purpose(reservation.getPurpose()).build());
 //        }
 //    }
-    public ResponseEntity<ReservationResponseDto> createReservation(ReservationDto reservationDto) {
-        if (!vehicleRepository.existsByLicensePlate(reservationDto.getVehicle()))
-            throw new VehicleNotFoundException("This vehicle does not exist");
+    public ResponseEntity<ResponseDto> createReservation(ReservationDto reservationDto) {
+        if (!vehicleRepository.existsByLicensePlate(reservationDto.getVehicle())){
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.VEHICLE_DOES_NOT_EXIST_CODE)
+                    .responseMessage(ResponseUtils.VEHICLE_DOES_NOT_EXIST_MESSAGE)
+                    .responseBody("Sorry, this vehicle does not exist")
+                    .build());
+        }
+          //  throw new VehicleNotFoundException("This vehicle does not exist");
         Reservation existingReservation = reservationRepository.findByVehicleAndDateAndStartTime(
                 reservationDto.getVehicle(), reservationDto.getDate(), reservationDto.getStartTime());
 
         if (existingReservation != null) {
             // A reservation for the same vehicle, date, and startTime already exists
-            throw new CustomReservationException("A reservation for the same vehicle, date, and startTime already exists.");
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.RESERVATION_RECORD_ALREADY_EXIST_CODE)
+                    .responseMessage(ResponseUtils.RESERVATION_RECORD_ALREADY_EXIST_MESSAGE)
+                    .responseBody("Reservation record already exist")
+                    .build());
+
+           // throw new CustomReservationException("A reservation for the same vehicle, date, and startTime already exists.");
         } else {
             // Create a new reservation
             //Date format is not working, it is returning null
@@ -86,17 +97,24 @@ public class ReservationServiceImpl implements ReservationService {
 
             // Save the new reservation to the repository
             reservationRepository.save(reservation);
+            return ResponseEntity.ok(ResponseDto.builder()
+                    .responseCode(ResponseUtils.RESERVATION_RECORD_CREATION_CODE)
+                    .responseMessage(ResponseUtils.RESERVATION_RECORD_CREATION_MESSAGE)
+                    .responseBody("Reservation booked for " + reservationDto.getVehicle() + " on " + reservationDto.getDate() + " from " + reservationDto.getStartTime() + " to " + reservationDto.getEndTime())
+                    .build());
 
-            return ResponseEntity.ok(ReservationResponseDto.builder().vehicle(reservation.getVehicle().getLicensePlate())
-                    .date(reservation.getDate()).startTime(reservation.getStartTime()).endTime(reservation.getEndTime())
-                    .purpose(reservation.getPurpose()).build());
+//            return ResponseEntity.ok(ReservationResponseDto.builder().vehicle(reservation.getVehicle().getLicensePlate())
+//                    .date(reservation.getDate()).startTime(reservation.getStartTime()).endTime(reservation.getEndTime())
+//                    .purpose(reservation.getPurpose()).build());
 
         }
     }
 
     @Override
     public ResponseEntity<List<ReservationResponseDto>> getAllReservations() {
-        if(reservationRepository.findAll()==null) return null;
+        if(reservationRepository.findAll()==null) {
+            throw new ReservationNotFoundException("No reservation found");
+        }
         List<Reservation> reservations = reservationRepository.findAll();
 
         List<ReservationResponseDto> reservationResponseDtos = reservations.stream()
@@ -107,13 +125,13 @@ public class ReservationServiceImpl implements ReservationService {
     }
 
     @Override
-    public ResponseEntity<ReservationResponseDto> getReservationById(Long reservationId) {
+    public ResponseEntity<ResponseDto> getReservationById(Long reservationId) {
         Reservation reservation = reservationRepository.findById(reservationId)
                 .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
 
         ReservationResponseDto reservationResponseDto = convertToReservationResponseDto(reservation);
-
-        return ResponseEntity.ok(reservationResponseDto);
+//not done
+        return ResponseEntity.ok(null);
     }
 
     private ReservationResponseDto convertToReservationResponseDto(Reservation reservation) {

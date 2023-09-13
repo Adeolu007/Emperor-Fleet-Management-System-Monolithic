@@ -34,8 +34,10 @@ public class Vehicle {
     private Date registrationDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date acquisitionDate;
+    //@Enumerated(EnumType.STRING)
+    private Status status;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToOne
     @JoinColumn(name = "driver_id")
     private DriverEntity driver;
 

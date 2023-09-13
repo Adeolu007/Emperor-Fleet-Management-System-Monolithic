@@ -31,21 +31,27 @@ public class AdminController {
 
     //Delete not working because of foreign key
     @DeleteMapping("/{licenseNumber}")
-    public ResponseEntity<String> deleteDriver(@PathVariable String licenseNumber) {
+    public ResponseEntity<ResponseDto> deleteDriver(@PathVariable String licenseNumber) {
         return driverService.deleteDriver(licenseNumber);
     }
 
 
     //register vehicle
     @PostMapping("/register-vehicle")
-    public ResponseEntity<String> registerVehicle(@RequestBody VehicleRegistration vehicleRegistration) {
+    public ResponseEntity<ResponseDto> registerVehicle(@RequestBody VehicleRegistration vehicleRegistration) {
         return vehicleService.registerNewVehicle(vehicleRegistration);
     }
 
     //delete Vehicle
     @DeleteMapping("/vehicle/{licensePlate}")
-    public ResponseEntity<String> deleteVehicle(@PathVariable String licensePlate) {
+    public ResponseEntity<ResponseDto> deleteVehicle(@PathVariable String licensePlate) {
         return vehicleService.deleteVehicle(licensePlate);
+    }
+
+    //Reassign a new driver to vehicle
+    @PutMapping("/change-driver/{licensePlate}")
+    public ResponseEntity<String> ChangeDriver(@PathVariable String licensePlate, @RequestParam(value = "license") String driverLicence){
+        return vehicleService.changeDriver(licensePlate,driverLicence);
     }
 
     //get fuel records by license plate
@@ -80,7 +86,7 @@ public class AdminController {
     //not working **********************
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<String> deleteRepairRecord(@PathVariable long id) {
+    public ResponseEntity<ResponseDto> deleteRepairRecord(@PathVariable long id) {
         return maintenanceRepairService.deleteRepairRecord(id);
     }
 
@@ -92,7 +98,7 @@ public class AdminController {
 
     //get reservation
     @GetMapping("/reservation/{reservationId}")
-    public ResponseEntity<ReservationResponseDto> getReservationById(@PathVariable Long reservationId) {
+    public ResponseEntity<ResponseDto> getReservationById(@PathVariable Long reservationId) {
         return reservationService.getReservationById(reservationId);
     }
 }

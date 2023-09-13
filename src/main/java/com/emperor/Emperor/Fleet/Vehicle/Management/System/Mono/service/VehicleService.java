@@ -1,15 +1,16 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RegisteredVehicleDto;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ResponseDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.UpdateVehicle;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.VehicleRegistration;
 import org.springframework.http.ResponseEntity;
 
 public interface VehicleService {
-    ResponseEntity<String> registerNewVehicle(VehicleRegistration vehicleRegistration);
-    ResponseEntity<RegisteredVehicleDto> findByLicensePlate(String licensePlate);
-    ResponseEntity<String> deleteVehicle(String licensePlate);
-    ResponseEntity<RegisteredVehicleDto> updateVehicle(UpdateVehicle updateVehicle);
+    ResponseEntity<ResponseDto> registerNewVehicle(VehicleRegistration vehicleRegistration);
+    ResponseEntity<ResponseDto> findByLicensePlate(String licensePlate);
+    ResponseEntity<ResponseDto> deleteVehicle(String licensePlate);
+    ResponseEntity<ResponseDto> updateVehicle(UpdateVehicle updateVehicle);
+    ResponseEntity<String> changeDriver (String licensePlate, String driverLicence);
 
 
 }

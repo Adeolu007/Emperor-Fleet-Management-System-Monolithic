@@ -61,7 +61,7 @@ public class DriverEntity {
     )
     private Set<RoleEntity> roles;
 
-    @OneToMany(mappedBy = "driver",cascade = CascadeType.REMOVE, orphanRemoval = true )
-    private List<Vehicle> vehicle = new ArrayList<>();;
+//    @OneToMany(mappedBy = "driver",cascade = CascadeType.REMOVE, orphanRemoval = true )
+//    private List<Vehicle> vehicle = new ArrayList<>();;
 
 }

@@ -21,7 +21,10 @@ public interface DriverRepository extends JpaRepository<DriverEntity, Long> {
     boolean existsByLicenseNumber(String licenseNumber);
 
     @Query("select d from DriverEntity d where d.licenseNumber = ?1")
-    DriverEntity findByLicenseNumber(String licenseNumber);
+    Optional<DriverEntity> findByLicenseNumber(String licenseNumber);
+
+//    @Query("select d from DriverEntity d where d.licenseNumber = ?1")
+//    DriverEntity findByLicenseNumber(String licenseNumber);
 
 //    Optional<DriverEntity> findByUsernameOrEmail(String usernameOrEmail);
 
