@@ -4,7 +4,6 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.DriverEntity;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Status;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Vehicle;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.DriverNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.VehicleNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.DriverRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
@@ -32,26 +31,26 @@ public class VehicleServiceImpl implements VehicleService{
     }
 
     @Override
-    public ResponseEntity<ResponseDto> registerNewVehicle(VehicleRegistration vehicleRegistration) {
-    if(vehicleRepository.existsByLicensePlate(vehicleRegistration.getLicensePlate())){
+    public ResponseEntity<ResponseDto> registerNewVehicle(VehicleRegistrationRequest vehicleRegistrationRequest) {
+    if(vehicleRepository.existsByLicensePlate(vehicleRegistrationRequest.getLicensePlate())){
         return ResponseEntity.ok(ResponseDto.builder()
                 .responseCode(ResponseUtils.VEHICLE_ALREADY_EXIST_CODE)
                 .responseMessage(ResponseUtils.VEHICLE_ALREADY_EXIST_MESSAGE)
-                .responseBody("Vehicle with Licence Plate " + vehicleRegistration.getLicensePlate() + " already exists.")
+                .responseBody("Vehicle with Licence Plate " + vehicleRegistrationRequest.getLicensePlate() + " already exists.")
                 .build());
      //   throw new VehicleAlreadyExistException("Vehicle with license plate " + vehicleRegistration.getLicensePlate() + " already exists");
     }
         Vehicle newVehicle = Vehicle.builder()
-                .licensePlate(vehicleRegistration.getLicensePlate())
-                .acquisitionDate(vehicleRegistration.getAcquisitionDate())
-                .model(vehicleRegistration.getModel())
-                .make(vehicleRegistration.getMake())
-                .year(vehicleRegistration.getYear())
-                .fuelCapacity(vehicleRegistration.getFuelCapacity())
-                .description(vehicleRegistration.getDescription())
-                .registrationDate(vehicleRegistration.getRegistrationDate()).email(driverRepository.findByLicenseNumber(vehicleRegistration.getDriverLicenseNumber()).get().getEmail())
-                .firstName(driverRepository.findByLicenseNumber(vehicleRegistration.getDriverLicenseNumber()).get().getFirstName())
-                .driver(driverRepository.findByLicenseNumber(vehicleRegistration.getDriverLicenseNumber()).get())
+                .licensePlate(vehicleRegistrationRequest.getLicensePlate())
+                .acquisitionDate(vehicleRegistrationRequest.getAcquisitionDate())
+                .model(vehicleRegistrationRequest.getModel())
+                .make(vehicleRegistrationRequest.getMake())
+                .year(vehicleRegistrationRequest.getYear())
+                .fuelCapacity(vehicleRegistrationRequest.getFuelCapacity())
+                .description(vehicleRegistrationRequest.getDescription())
+                .registrationDate(vehicleRegistrationRequest.getRegistrationDate()).email(driverRepository.findByLicenseNumber(vehicleRegistrationRequest.getDriverLicenseNumber()).get().getEmail())
+                .firstName(driverRepository.findByLicenseNumber(vehicleRegistrationRequest.getDriverLicenseNumber()).get().getFirstName())
+                .driver(driverRepository.findByLicenseNumber(vehicleRegistrationRequest.getDriverLicenseNumber()).get())
                 .status(Status.ACTIVE)
                 .build();
 
@@ -66,6 +65,9 @@ public class VehicleServiceImpl implements VehicleService{
                 .responseCode(ResponseUtils.VEHICLE_CREATION_CODE)
                 .responseMessage(ResponseUtils.VEHICLE_CREATION_MESSAGE)
                 .responseBody("A new vehicle with Licence Plate " + newVehicle.getLicensePlate() + " has successfully been created.")
+//                        .responseBody(VehicleResponse.builder().make(newVehicle.getMake())
+//                                .model(newVehicle.getModel()).licensePlate(newVehicle.getLicensePlate())
+//                                .description(newVehicle.getDescription()).fuelCapacity(newVehicle.getFuelCapacity()))
                 .build());
 
     }
@@ -95,10 +97,15 @@ public class VehicleServiceImpl implements VehicleService{
                 .email(driverRepository.findById(vehicle.getDriver().getId()).get().getEmail())
                 .build();
 
+log.info(vehicle.getDriver().getLicenseNumber().toString());
         return ResponseEntity.ok(ResponseDto.builder()
                 .responseCode(ResponseUtils.VEHICLE_FOUND_CODE)
                 .responseMessage(ResponseUtils.VEHICLE_FOUND_MESSAGE)
-                .responseBody("Vehicle with license number " + vehicle.getLicensePlate() + " has been assigned to our driver " + vehicle.getDriver() )
+                //.responseBody(VehicleInfoResponse.builder().licensePlate(vehicle.getLicensePlate().toString()).build())
+                  .responseBody("Vehicle with license number " + vehicle.getLicensePlate() + " has been assigned to our driver " )
+                        .responseBody(VehicleInfoResponse.builder()
+                                .licensePlate(vehicle.getLicensePlate()).make(vehicle.getMake())
+                                .fuelCapacity(vehicle.getFuelCapacity()).description(vehicle.getDescription()).build())
                 .build());
     }
 
@@ -124,8 +131,9 @@ public class VehicleServiceImpl implements VehicleService{
     }
 
     @Override
-    public ResponseEntity<ResponseDto> updateVehicle(UpdateVehicle updateVehicle) {
-        if (!vehicleRepository.existsByLicensePlate(updateVehicle.getLicensePlate())) {
+    public ResponseEntity<ResponseDto> updateVehicle(VehicleRegistrationRequest updateVehicle, String licensePlate) {
+        Vehicle vehicle = vehicleRepository.findByLicensePlate(licensePlate);
+        if (vehicle==null) {
             return ResponseEntity.badRequest().body(ResponseDto.builder()
                     .responseCode(ResponseUtils.VEHICLE_DOES_NOT_EXIST_CODE)
                     .responseMessage(ResponseUtils.VEHICLE_DOES_NOT_EXIST_MESSAGE)
@@ -134,21 +142,31 @@ public class VehicleServiceImpl implements VehicleService{
                     .build());
           //  throw new VehicleNotFoundException("This vehicle does not exist");
         }
-        Vehicle vehicle = vehicleRepository.findByLicensePlate(updateVehicle.getLicensePlate());
+        vehicle.setMake(updateVehicle.getMake());
+        vehicle.setModel(updateVehicle.getModel());
+        vehicle.setDescription(updateVehicle.getDescription());
+        vehicle.setYear(updateVehicle.getYear());
+        vehicle.setFuelCapacity(updateVehicle.getFuelCapacity());
+        vehicle.setRegistrationDate(updateVehicle.getRegistrationDate());
+        vehicleRepository.save(vehicle);
 
-        RegisteredVehicleDto responseDto = RegisteredVehicleDto.builder()
-                .licensePlate(updateVehicle.getLicensePlate())
-                .make(updateVehicle.getMake())
-                .model(updateVehicle.getModel())
-                .fuelCapacity(updateVehicle.getFuelCapacity())
-                .year(updateVehicle.getYear())
-                .acquisitionDate(updateVehicle.getAcquisitionDate())
-                .description(updateVehicle.getDescription())
-                .build();
+//        RegisteredVehicleDto responseDto = RegisteredVehicleDto.builder()
+//                .licensePlate(updateVehicle.getLicensePlate())
+//                .make(updateVehicle.getMake())
+//                .model(updateVehicle.getModel())
+//                .fuelCapacity(updateVehicle.getFuelCapacity())
+//                .year(updateVehicle.getYear())
+//                .acquisitionDate(updateVehicle.getAcquisitionDate())
+//                .description(updateVehicle.getDescription())
+//                .build();
         return ResponseEntity.ok(ResponseDto.builder()
                 .responseCode(ResponseUtils.VEHICLE_UPDATED_CODE)
                 .responseMessage(ResponseUtils.VEHICLE_UPDATED_MESSAGE)
-                .responseBody("Vehicle with license plate " + vehicle.getLicensePlate() + " has been updated")
+                .responseBody(VehicleResponse.builder()
+                        .make(vehicle.getMake())
+                        //.acquisitionDate(vehicle.getAcquisitionDate())
+                        //.year(vehicle.getYear()).fuelCapacity(vehicle.getFuelCapacity())
+                        .model(vehicle.getModel()))
                 .build());
 
     }

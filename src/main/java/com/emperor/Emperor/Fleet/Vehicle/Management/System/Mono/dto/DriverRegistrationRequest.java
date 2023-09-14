@@ -11,7 +11,7 @@ import java.util.Date;
 @NoArgsConstructor
 @Builder
 @Data
-public class DriverRegistration {
+public class DriverRegistrationRequest {
     private String firstName;
     private String lastName;
     private String licenseNumber;

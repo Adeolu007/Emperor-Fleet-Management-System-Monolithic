@@ -9,7 +9,7 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class UpdateVehicle {
+public class VehicleRegistrationRequest {
     private String make;
     private String model;
     private int year;
@@ -18,5 +18,7 @@ public class UpdateVehicle {
     private Date acquisitionDate;
     private String description;
     private String fuelCapacity;
-
+    //private String email;
+//    private DriverEntity driverId;
+    private String driverLicenseNumber;
 }

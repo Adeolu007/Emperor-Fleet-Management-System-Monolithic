@@ -2,7 +2,6 @@ package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.*;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -38,8 +37,8 @@ public class AdminController {
 
     //register vehicle
     @PostMapping("/register-vehicle")
-    public ResponseEntity<ResponseDto> registerVehicle(@RequestBody VehicleRegistration vehicleRegistration) {
-        return vehicleService.registerNewVehicle(vehicleRegistration);
+    public ResponseEntity<ResponseDto> registerVehicle(@RequestBody VehicleRegistrationRequest vehicleRegistrationRequest) {
+        return vehicleService.registerNewVehicle(vehicleRegistrationRequest);
     }
 
     //delete Vehicle
