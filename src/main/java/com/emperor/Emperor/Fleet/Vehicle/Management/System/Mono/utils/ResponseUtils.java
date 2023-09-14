@@ -29,8 +29,8 @@ public class ResponseUtils {
     public static final String MAINTENANCE_REPAIR_RECORD_DOES_NOT_EXIST_MESSAGE = "This record does not exist";
     public static final String MAINTENANCE_REPAIR_RECORD_UPDATED_CODE = "014";
     public static final String MAINTENANCE_REPAIR_RECORD_UPDATED_MESSAGE = "Vehicle has been successfully updated";
-    public static final String MAINTENANCE_REPAIR_RECORD_DELETED_CODE = "015";
-    public static final String MAINTENANCE_REPAIR_RECORD_DELETED_MESSAGE = "Repair record has been deleted Successfully";
+    public static final String EMAIL_IS_NOT_VALID_CODE = "015";
+    public static final String EMAIL_IS_NOT_VALID_MESSAGE = "Enter a valid email";
     public static final String RESERVATION_RECORD_ALREADY_EXIST_CODE = "016";
     public static final String RESERVATION_RECORD_ALREADY_EXIST_MESSAGE = "Reservation already exist already exist";
     public static final String RESERVATION_RECORD_CREATION_CODE = "017";
@@ -44,6 +44,8 @@ public class ResponseUtils {
     public static final String USER_DELETED_MESSAGE = "User successfully deleted";
     public static final String RESERVATION_RECORD_FOUND_CODE = "020";
     public static final String RESERVATION_RECORD_FOUND_MESSAGE = "Reservation record retrieved";
+    public static final String EMAIL_EXISTS_CODE = "021";
+    public static final String EMAIL_EXISTS_MESSAGE = "This email address already exists";
 
     public static final int lengthOfLicenceNumber = 10;
 
