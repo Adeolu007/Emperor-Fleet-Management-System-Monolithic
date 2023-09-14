@@ -1,14 +1,17 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.CreationTimestamp;
+
+import java.util.Date;
+import java.util.UUID;
 
 @Entity
-@Table(name = "confirmation_token")
+@Table(name = "token")
 @Getter
 @Setter
 @AllArgsConstructor
@@ -23,12 +26,12 @@ public class Token {
     @CreationTimestamp
     private Date createdAt;
 
-    @OneToOne(targetEntity = Organizer.class, fetch = FetchType.EAGER)
-    @JoinColumn(nullable = false,name = "organizer_id")
-    private Organizer organizer;
+    @OneToOne(targetEntity = Admin.class, fetch = FetchType.EAGER)
+    @JoinColumn(nullable = false,name = "admin_id")
+    private Admin admin;
 
-    public ConfirmationToken(Organizer organizer){
-        this.organizer=organizer;
+    public Token(Admin admin){
+        this.admin=admin;
         createdAt = new Date();
         token = UUID.randomUUID().toString();
     }

@@ -46,6 +46,8 @@ public class ResponseUtils {
     public static final String RESERVATION_RECORD_FOUND_MESSAGE = "Reservation record retrieved";
     public static final String EMAIL_EXISTS_CODE = "021";
     public static final String EMAIL_EXISTS_MESSAGE = "This email address already exists";
+    public static final String ADMIN_ACCOUNT_CREATION_SUCCESS_CODE = "022";
+    public static final String ADMIN_ACCOUNT_CREATION_SUCCESS_MESSAGE = "Admin Account has been successfully created!";
 
     public static final int lengthOfLicenceNumber = 10;
 

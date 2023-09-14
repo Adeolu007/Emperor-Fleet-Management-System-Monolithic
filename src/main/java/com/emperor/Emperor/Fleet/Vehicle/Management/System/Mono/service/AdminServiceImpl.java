@@ -4,8 +4,10 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Admin;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.RoleEntity;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Status;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Token;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.AdminRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.RoleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.TokenRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.security.config.JwtTokenProvider;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,11 +27,12 @@ import java.util.List;
 import java.util.regex.Pattern;
 
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class AdminServiceImpl implements AdminService{
     private final AdminRepository adminRepository;
     private final EmailService emailService;
-   // private final ConfirmationTokenRepository tokenRepository;
+    private final TokenRepository tokenRepository;
     private final RoleRepository roleRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
@@ -61,22 +64,23 @@ public class AdminServiceImpl implements AdminService{
 //        admin.setRoleame(Collections.singleton(role));
         adminRepository.save(admin);
 
-        ConfirmationToken confirmationToken = new ConfirmationToken(organizer);
-        log.info("confirmation token: "+ confirmationToken);
+        Token token = new Token(admin);
+        log.info("confirmation token: "+ token);
 
-        tokenRepository.save(confirmationToken);
+        tokenRepository.save(token);
 
-        EmailDetails messages = EmailDetails.builder()
+        EmailDetails message = EmailDetails.builder()
                 .subject("Account Created Successfully")
-                .recipient(organizer.getEmail())
+                .recipient(admin.getEmail())
                 .messageBody("Account Created Successfully "+"To confirm your email address, please click here :+" +
-                        "http://localhost:8080/api/identity/organizer/confirmtoken?token="+confirmationToken.getToken())
+                        //change this url ASAP!!!!!!!!!!!!!!
+                        "http://localhost:8080/api/identity/organizer/confirmtoken?token="+token.getToken())
                 .build();
-        emailService.sendSimpleEmail(messages);
+        emailService.sendSimpleMail(message);
 //        sendMail(messages);
-        return ResponseEntity.ok(CustomResponse.builder()
-                .responseCode(ResponseUtils.ACCOUNT_CREATION_SUCCESS_CODE)
-                .responseMessage(ResponseUtils.ACCOUNT_CREATION_SUCCESS_MESSAGE)
+        return ResponseEntity.ok(ResponseDto.builder()
+                .responseCode(ResponseUtils.ADMIN_ACCOUNT_CREATION_SUCCESS_CODE)
+                .responseMessage(ResponseUtils.ADMIN_ACCOUNT_CREATION_SUCCESS_MESSAGE)
                 .responseBody("Your details is under review and your status will " +
                         "be confirmed in less than 24 Hours")
                 .build());
