@@ -48,27 +48,23 @@ public class FuelServiceImpl implements FuelService {
         fuelRecord.setRefuelingDate(fuelRecordDto.getRefuelingDate());
         fuelRecord.setLitersFilled(fuelRecordDto.getLitersFilled());
         fuelRecordRepository.save(fuelRecord);
-
-        FuelRecordResponse savedFuelRecord = FuelRecordResponse.builder()
-                .refuelingDate(fuelRecord.getRefuelingDate())
-                .costPerLiter(fuelRecord.getCostPerLiter())
-                .licensePlate(fuelRecord.getVehicle().getLicensePlate())
-                .litersFilled(fuelRecord.getLitersFilled())
-                .totalCost(totalCost)
-                .build();
-
         return ResponseEntity.ok(ResponseDto.builder()
                 .responseCode(ResponseUtils.FUEL_RECORD_CREATION_CODE)
                 .responseMessage(ResponseUtils.FUEL_RECORD_CREATION_MESSAGE)
-                .responseBody("A new fuel record has successfully been created for vehicle with Licence Plate " + fuelRecord.getVehicle().getLicensePlate())
+                .responseBody(FuelRecordResponse.builder()
+                        .refuelingDate(fuelRecord.getRefuelingDate())
+                        .costPerLiter(fuelRecord.getCostPerLiter())
+                        .licensePlate(fuelRecord.getVehicle().getLicensePlate())
+                        .litersFilled(fuelRecord.getLitersFilled())
+                        .totalCost(totalCost)
+                        .build())
                 .build());
-
     }
 
     @Override
     public ResponseEntity<List<FuelRecordResponse>> getFuelRecordsByLicensePlate(String licensePlate) {
         List<FuelRecord> fuelRecords = fuelRecordRepository.findByLicensePlate(licensePlate);
-
+//ResponseDto
         if (fuelRecords.isEmpty()) {
             throw new FuelRecordsNotFoundException("No fuel records found for license plate: " + licensePlate);
         }

@@ -1,7 +1,7 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
 
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.LoginDto;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.LoginRequest;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RegisterDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.AuthService;
 import lombok.AllArgsConstructor;
@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.Collections;
 
 @RestController
 @RequestMapping("/api/v1/auth")
@@ -26,7 +24,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginDto loginDto){
-        return new ResponseEntity<>(authService.login(loginDto), HttpStatus.OK);
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest){
+        return new ResponseEntity<>(authService.login(loginRequest), HttpStatus.OK);
     }
 }

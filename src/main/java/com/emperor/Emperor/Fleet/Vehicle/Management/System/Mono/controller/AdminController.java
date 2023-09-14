@@ -75,8 +75,9 @@ public class AdminController {
 
     //get all repair by license plate
     //this endpoint is not working *********************************************************
-    @GetMapping("/by-license-plate/{licensePlate}")
-    public ResponseEntity<List<MaintenanceTaskResponseDto>> getRepairRecordsByLicensePlate(String licensePlate) {
+   // @GetMapping("/by-license-plate/{licensePlate}")
+    @GetMapping("/by-license-plate")
+    public ResponseEntity<List<MaintenanceTaskResponseDto>> getRepairRecordsByLicensePlate(@RequestParam(value = "licensePlate")String licensePlate) {
         return maintenanceRepairService.getRepairRecordsByLicensePlate(licensePlate);
     }
 
@@ -84,10 +85,10 @@ public class AdminController {
     //delete repair record
     //not working **********************
 
-    @DeleteMapping("/delete/{id}")
-    public ResponseEntity<ResponseDto> deleteRepairRecord(@PathVariable long id) {
-        return maintenanceRepairService.deleteRepairRecord(id);
-    }
+//    @DeleteMapping("/delete/{id}")
+//    public ResponseEntity<ResponseDto> deleteRepairRecord(@PathVariable long id) {
+//        return maintenanceRepairService.deleteRepairRecord(id);
+//    }
 
     //get all reservations
     @GetMapping("/all-reservations")

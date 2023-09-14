@@ -1,7 +1,7 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.AuthResponse;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.LoginDto;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.LoginRequest;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RegisterDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.DriverEntity;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.RoleEntity;
@@ -34,8 +34,8 @@ public class AuthServiceImpl implements AuthService {
 
 
     @Override
-    public AuthResponse login(LoginDto loginDto) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginDto.getUsername(), loginDto.getPassword()));
+    public AuthResponse login(LoginRequest loginRequest) {
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return AuthResponse.builder()
                 .token(jwtTokenProvider.generateToken(authentication))

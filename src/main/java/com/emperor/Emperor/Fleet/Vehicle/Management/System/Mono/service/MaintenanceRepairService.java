@@ -14,5 +14,5 @@ public interface MaintenanceRepairService {
     ResponseEntity< List<MaintenanceTaskResponseDto>> getRepairRecordsByLicensePlate(String licensePlate);
 
     ResponseEntity<ResponseDto> updateRepairRecord(UpdateMaintenanceRepairRequest updateMaintenanceRepairRequest);
-    ResponseEntity<ResponseDto> deleteRepairRecord(long id);
+//    ResponseEntity<ResponseDto> deleteRepairRecord(long id);
 }

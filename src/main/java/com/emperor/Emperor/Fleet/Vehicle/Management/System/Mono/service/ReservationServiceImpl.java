@@ -86,6 +86,8 @@ public class ReservationServiceImpl implements ReservationService {
 
            // throw new CustomReservationException("A reservation for the same vehicle, date, and startTime already exists.");
         } else {
+
+            //add am or pm to the time
             // Create a new reservation
             //Date format is not working, it is returning null
             Reservation reservation = new Reservation();
@@ -100,7 +102,8 @@ public class ReservationServiceImpl implements ReservationService {
             return ResponseEntity.ok(ResponseDto.builder()
                     .responseCode(ResponseUtils.RESERVATION_RECORD_CREATION_CODE)
                     .responseMessage(ResponseUtils.RESERVATION_RECORD_CREATION_MESSAGE)
-                    .responseBody("Reservation booked for " + reservationDto.getVehicle() + " on " + reservationDto.getDate() + " from " + reservationDto.getStartTime() + " to " + reservationDto.getEndTime())
+                    .responseBody(ReservationResponseDto.builder().vehicle(reservationDto.getVehicle()).purpose(reservationDto.getPurpose())
+                            .date(reservation.getDate()).startTime(reservation.getStartTime()).endTime(reservation.getEndTime()).build())
                     .build());
 
 //            return ResponseEntity.ok(ReservationResponseDto.builder().vehicle(reservation.getVehicle().getLicensePlate())
@@ -126,12 +129,49 @@ public class ReservationServiceImpl implements ReservationService {
 
     @Override
     public ResponseEntity<ResponseDto> getReservationById(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
+//        Reservation reservation = reservationRepository.findById(reservationId).get();
+//               // .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
+//        if(reservation.equals(null)){
+//           return  ResponseEntity.badRequest().body(ResponseDto.builder()
+//                .responseCode(ResponseUtils.RESERVATION_RECORD_NOT_FOUND_CODE)
+//                .responseMessage(ResponseUtils.RESERVATION_RECORD_NOT_FOUND_MESSAGE)
+//                .responseBody("Reservation does not exist")
+//                .build());}
+//
+//        ReservationResponseDto reservationResponseDto = convertToReservationResponseDto(reservation);
+////not done
+//        return ResponseEntity.ok(ResponseDto.builder()
+//                .responseCode(ResponseUtils.RESERVATION_RECORD_CREATION_CODE)
+//                .responseMessage(ResponseUtils.RESERVATION_RECORD_CREATION_MESSAGE)
+//                .responseBody(ReservationResponseDto.builder().vehicle(reservation.getVehicle().getLicensePlate()).purpose(reservation.getPurpose())
+//                        .date(reservation.getDate()).startTime(reservation.getStartTime()).endTime(reservation.getEndTime()).build())
+//                .build());
+        try {
+            Reservation reservation = reservationRepository.findById(reservationId)
+                    .orElseThrow(() -> new ReservationNotFoundException("Reservation not found"));
 
-        ReservationResponseDto reservationResponseDto = convertToReservationResponseDto(reservation);
-//not done
-        return ResponseEntity.ok(null);
+            // If reservation is found, continue processing
+            ReservationResponseDto reservationResponseDto = convertToReservationResponseDto(reservation);
+
+            return ResponseEntity.ok(ResponseDto.builder()
+                    .responseCode(ResponseUtils.RESERVATION_RECORD_CREATION_CODE)
+                    .responseMessage(ResponseUtils.RESERVATION_RECORD_CREATION_MESSAGE)
+                    .responseBody(ReservationResponseDto.builder()
+                            .vehicle(reservation.getVehicle().getLicensePlate())
+                            .purpose(reservation.getPurpose())
+                            .date(reservation.getDate())
+                            .startTime(reservation.getStartTime())
+                            .endTime(reservation.getEndTime())
+                            .build())
+                    .build());
+        } catch (ReservationNotFoundException ex) {
+            // Handle ReservationNotFoundException here
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.RESERVATION_RECORD_NOT_FOUND_CODE)
+                    .responseMessage(ResponseUtils.RESERVATION_RECORD_NOT_FOUND_MESSAGE)
+                    .responseBody("Reservation does not exist")
+                    .build());
+        }
     }
 
     private ReservationResponseDto convertToReservationResponseDto(Reservation reservation) {

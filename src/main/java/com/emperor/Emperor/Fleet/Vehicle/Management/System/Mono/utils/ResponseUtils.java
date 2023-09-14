@@ -42,6 +42,8 @@ public class ResponseUtils {
     public static final String SUCCESS_MESSAGE = "Successful";
     public static final String USER_DELETED_CODE = "019";
     public static final String USER_DELETED_MESSAGE = "User successfully deleted";
+    public static final String RESERVATION_RECORD_FOUND_CODE = "020";
+    public static final String RESERVATION_RECORD_FOUND_MESSAGE = "Reservation record retrieved";
 
     public static final int lengthOfLicenceNumber = 10;
 

@@ -106,6 +106,7 @@ public class SecurityConfig {
                                 .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/drivers/**").permitAll()
                                 .requestMatchers("/api/admin/**").permitAll()
+                                .requestMatchers("/api/drivers/reservation").permitAll()
                                 .requestMatchers("/api/admin/change-driver/**").permitAll()
                                 .requestMatchers("/api/v1/monify/**").permitAll()
                                 .requestMatchers(UNSECURED_ATTENDEE_END_POINTS).permitAll()

@@ -46,10 +46,12 @@ public class MaintenanceRepairServiceImpl implements MaintenanceRepairService{
         maintenanceRepair.setScheduledDate(maintenanceRepairRequest.getScheduledDate());
         maintenanceRepair.setVehicle(vehicleRepository.findByLicensePlate(maintenanceRepairRequest.getVehicleLicensePlate()));
         maintenanceRepairRepository.save(maintenanceRepair);
+
         return ResponseEntity.ok(ResponseDto.builder()
                 .responseCode(ResponseUtils.MAINTENANCE_REPAIR_RECORD_CREATION_CODE)
                 .responseMessage(ResponseUtils.MAINTENANCE_REPAIR_RECORD_CREATION_MESSAGE)
-                .responseBody("A new repair record has been successfully created for vehicle with Licence Plate " + maintenanceRepair.getVehicle().getLicensePlate())
+                .responseBody(MaintenanceTaskResponseDto.builder().cost(maintenanceRepair.getCost()).vehicleLicensePlate(maintenanceRepair.getVehicle().getLicensePlate())
+                        .description(maintenanceRepair.getDescription()).scheduledDate(maintenanceRepair.getScheduledDate()).build())
                 .build());  }
 
 
@@ -69,24 +71,23 @@ public class MaintenanceRepairServiceImpl implements MaintenanceRepairService{
 
     @Override
     public ResponseEntity<List<MaintenanceTaskResponseDto>> getRepairRecordsByLicensePlate(String licensePlate) {
-        List<MaintenanceRepair> repairRecords = maintenanceRepairRepository.findByVehicleLicensePlate(licensePlate);
-
-        if (repairRecords.isEmpty()) {
+        List<MaintenanceRepair> repairRecords = maintenanceRepairRepository.findAll();
+        System.out.println("Total repair records: " + repairRecords.size());
+        List<MaintenanceRepair> filteredRecords = maintenanceRepairRepository.findAll().stream()
+                .filter(maintenanceRepair -> maintenanceRepair.getVehicle().getLicensePlate().equals(licensePlate))
+                .collect(Collectors.toList());
+        System.out.println("Total filteredRecords records: " + filteredRecords.size());
+        if (filteredRecords.isEmpty()) {
+            System.out.println("No repair records found for license plate: " + licensePlate);
             throw new RepairRecordNotFoundException("No repair records found for license plate: " + licensePlate);
         }
-     //
-        List<MaintenanceRepair> filteredRecords = repairRecords.stream()
-                .filter(record -> record.getVehicle().getLicensePlate().equals(licensePlate))
+
+        List<MaintenanceTaskResponseDto> responseDtoList = filteredRecords.stream()
+                .map(this::convertToMaintenanceTaskResponseDto)
                 .collect(Collectors.toList());
+        System.out.println("Response DTO list size: " + responseDtoList.size());
 
-//        return ResponseEntity.ok( repairRecords.stream()
-//                .map(this::convertToMaintenanceTaskResponseDto)
-//                .collect(Collectors.toList()));
-        return ResponseEntity.ok(filteredRecords.stream()
-                        .map(this::convertToMaintenanceTaskResponseDto).toList());
-
-
-//        return ResponseEntity.ok(filteredRecords)
+        return ResponseEntity.ok(responseDtoList);
     }
 
     @Override
@@ -102,7 +103,8 @@ public class MaintenanceRepairServiceImpl implements MaintenanceRepairService{
             return ResponseEntity.ok(ResponseDto.builder()
                     .responseCode(ResponseUtils.MAINTENANCE_REPAIR_RECORD_UPDATED_CODE)
                     .responseMessage(ResponseUtils.MAINTENANCE_REPAIR_RECORD_UPDATED_MESSAGE)
-                    .responseBody("Repair record record has been successfully updated")
+                    .responseBody(MaintenanceTaskResponseDto.builder().cost(maintenanceRepair.getCost()).vehicleLicensePlate(maintenanceRepair.getVehicle().getLicensePlate())
+                            .description(maintenanceRepair.getDescription()).scheduledDate(maintenanceRepair.getScheduledDate()).build())
                     .build());
         } else {
             return ResponseEntity.badRequest().body(ResponseDto.builder()
@@ -113,24 +115,24 @@ public class MaintenanceRepairServiceImpl implements MaintenanceRepairService{
         }
     }
 
-    @Override
-    public ResponseEntity<ResponseDto> deleteRepairRecord(long id) {
-        if (vehicleRepository.existsById(id)) {
-           maintenanceRepairRepository.deleteById(id);
-            return ResponseEntity.ok(ResponseDto.builder()
-                    .responseCode(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DELETED_CODE)
-                    .responseMessage(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DELETED_MESSAGE)
-                    .responseBody("Repair record record has been deleted")
-                    .build());
-        } else {
-            return ResponseEntity.badRequest().body(ResponseDto.builder()
-                    .responseCode(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DOES_NOT_EXIST_CODE)
-                    .responseMessage(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DOES_NOT_EXIST_MESSAGE)
-                    .responseBody("Sorry, Repair record not found for this vehicle")
-                    .build());
-            // throw new RepairRecordNotFoundException("Repair record not found for this vehicle ");
-        }
-    }
+//    @Override
+//    public ResponseEntity<ResponseDto> deleteRepairRecord(long id) {
+//        if (vehicleRepository.existsById(id)) {
+//           maintenanceRepairRepository.deleteById(id);
+//            return ResponseEntity.ok(ResponseDto.builder()
+//                    .responseCode(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DELETED_CODE)
+//                    .responseMessage(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DELETED_MESSAGE)
+//                    .responseBody("Repair record record has been deleted")
+//                    .build());
+//        } else {
+//            return ResponseEntity.badRequest().body(ResponseDto.builder()
+//                    .responseCode(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DOES_NOT_EXIST_CODE)
+//                    .responseMessage(ResponseUtils.MAINTENANCE_REPAIR_RECORD_DOES_NOT_EXIST_MESSAGE)
+//                    .responseBody("Sorry, Repair record not found for this vehicle")
+//                    .build());
+//            // throw new RepairRecordNotFoundException("Repair record not found for this vehicle ");
+//        }
+
 
 
     private MaintenanceTaskResponseDto convertToMaintenanceTaskResponseDto(MaintenanceRepair repairRecord) {
