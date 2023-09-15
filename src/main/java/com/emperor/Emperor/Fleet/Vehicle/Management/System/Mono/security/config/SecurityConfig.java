@@ -30,48 +30,48 @@ public class SecurityConfig {
 
     private  final CustomUserDetailsService userDetailsService;
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private static final String[] UNSECURED_ORGANIZER_END_POINTS ={
-            "/api/image/**",
-            "/api/identity/organizer/confirmtoken/**",
-            "/api/identity/organizer/signin",
-            "/api/identity/organizer/signup",
-            "/api/identity/organizer/password/reset"
-    };
-    private static final String[] UNSECURED_ADMIN_END_POINTS ={
-            "/api/identity/admin/signin",
-            "/api/identity/admin/signup"
-    };
-    private static final String[] UNSECURED_ATTENDEE_END_POINTS ={
-            "/api/identity/attendee/signin",
-            "/api/identity/attendee/signup",
-            "/api/identity/attendee/password/reset",
-            "/api/identity/attendee/single/attendee/**"
-    };
-
-    private static final String[] SECURED_ADMIN_END_POINTS ={
-            "/api/identity/admin/createProfile",
-    };
-
-    private static final String[] SECURED_ORGANIZER_END_POINTS ={
-            "/api/identity/organizer/update/**",
-            "api/identity/role/**",
-            "api/identity/role/create",
-            "api/identity/role/role/{roleId}",
-            "api/identity/role/get/**",
-            "api/identity/organizer/getAll/**",
-            "api/identity/organizer/getAll/organizer",
-            "api/identity/organizer/getAll/getSingleOrganizer/**",
-            "api/identity/organizer/getAll/organizer",
-            "api/identity/organizer/getAll/getSingleOrganizer/{organizerId}",
-            "api/identity/attendee/single/attendee/{userId}",
-            "api/identity/attendee/all/attendee",
-            "/**"
-    };
-    private static final String[] SECURED_ATTENDEE_END_POINTS ={
-            "/api/identity/attendee/update/**",
-            "/api/identity/attendee/single/attendee"
-//            "/api/identity/attendee/single/**"
-    };
+//    private static final String[] UNSECURED_ORGANIZER_END_POINTS ={
+//            "/api/image/**",
+//            "/api/identity/organizer/confirmtoken/**",
+//            "/api/identity/organizer/signin",
+//            "/api/identity/organizer/signup",
+//            "/api/identity/organizer/password/reset"
+//    };
+//    private static final String[] UNSECURED_ADMIN_END_POINTS ={
+//            "/api/identity/admin/signin",
+//            "/api/identity/admin/signup"
+//    };
+//    private static final String[] UNSECURED_ATTENDEE_END_POINTS ={
+//            "/api/identity/attendee/signin",
+//            "/api/identity/attendee/signup",
+//            "/api/identity/attendee/password/reset",
+//            "/api/identity/attendee/single/attendee/**"
+//    };
+//
+//    private static final String[] SECURED_ADMIN_END_POINTS ={
+//            "/api/identity/admin/createProfile",
+//    };
+//
+//    private static final String[] SECURED_ORGANIZER_END_POINTS ={
+//            "/api/identity/organizer/update/**",
+//            "api/identity/role/**",
+//            "api/identity/role/create",
+//            "api/identity/role/role/{roleId}",
+//            "api/identity/role/get/**",
+//            "api/identity/organizer/getAll/**",
+//            "api/identity/organizer/getAll/organizer",
+//            "api/identity/organizer/getAll/getSingleOrganizer/**",
+//            "api/identity/organizer/getAll/organizer",
+//            "api/identity/organizer/getAll/getSingleOrganizer/{organizerId}",
+//            "api/identity/attendee/single/attendee/{userId}",
+//            "api/identity/attendee/all/attendee",
+//            "/**"
+//    };
+//    private static final String[] SECURED_ATTENDEE_END_POINTS ={
+//            "/api/identity/attendee/update/**",
+//            "/api/identity/attendee/single/attendee"
+////            "/api/identity/attendee/single/**"
+//    };
 
     public SecurityConfig(CustomUserDetailsService userDetailsService, JwtAuthenticationFilter jwtAuthenticationFilter){
         this.userDetailsService = userDetailsService;
@@ -102,13 +102,15 @@ public class SecurityConfig {
                 .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize ->
                         authorize
+                                //http://localhost:8082/api/v1/auth/signup
                                 .requestMatchers("api/**").permitAll()
-                                .requestMatchers("/api/admin/login").authenticated()
-                                .requestMatchers("/api/v1/auth/login").authenticated()
+                                .requestMatchers("/api/v1/auth/**").permitAll()
+                                .requestMatchers("/api/admin/login").permitAll()
+                                .requestMatchers("/api/v1/auth/login").permitAll()
                                 .requestMatchers("/api/drivers/**").hasAnyRole("DRIVER", "ADMIN")
                                 .requestMatchers("/api/admin").hasRole("ADMIN").anyRequest().authenticated()
 
-                                .anyRequest().authenticated()
+
                 )
                 .httpBasic(Customizer.withDefaults());
         httpSecurity.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS));

@@ -33,16 +33,16 @@ public class AdminController {
 //        return adminService.signUp(request);
 //    }
 
-    @PostMapping("/signup")
-    @ResponseStatus(HttpStatus.CREATED)
-public String register(@RequestBody AdminRegisterRequest adminRegisterRequest) {
-        return adminService.register(adminRegisterRequest);
-}
-
-    @PostMapping("/login")
-    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
-        return adminService.login(loginRequest);
-    }
+//    @PostMapping("/signup")
+//    @ResponseStatus(HttpStatus.CREATED)
+//public String register(@RequestBody AdminRegisterRequest adminRegisterRequest) {
+//        return adminService.register(adminRegisterRequest);
+//}
+//
+//    @PostMapping("/login")
+//    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
+//        return adminService.login(loginRequest);
+//    }
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
