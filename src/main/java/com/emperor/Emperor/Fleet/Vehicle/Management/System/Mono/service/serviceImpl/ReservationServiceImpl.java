@@ -1,4 +1,4 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ReservationDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ReservationResponseDto;
@@ -10,6 +10,7 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.Reserv
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.VehicleNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.ReservationRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.ReservationService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;

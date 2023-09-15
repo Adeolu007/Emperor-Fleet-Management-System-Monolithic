@@ -1,4 +1,4 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.*;
@@ -6,6 +6,8 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.Admin
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.RoleRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.TokenRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.security.config.JwtTokenProvider;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.AdminService;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.EmailService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -25,7 +27,7 @@ import java.util.List;
 @Service
 @Slf4j
 @AllArgsConstructor
-public class AdminServiceImpl implements AdminService{
+public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final EmailService emailService;
     private final TokenRepository tokenRepository;
@@ -152,57 +154,57 @@ public class AdminServiceImpl implements AdminService{
 //                            .build());
 //        }
 //    }
-    @Override
-    public ResponseEntity<ResponseDto> confirmToken(String token) {
+//    @Override
+//    public ResponseEntity<ResponseDto> confirmToken(String token) {
+//
+////        Token token1 = tokenRepository.findByToken(token);
+////        if (token1 !=null){
+////            Admin admin = adminRepository.findByEmailIgnoreCase(token1.getAdmin().getEmail());
+//////            organizer.setIsEnabled(true);
+////            String temporaryPassword = ResponseUtils.generateTemporaryPassword();
+////            organizer.setPassword(passwordEncoder.encode(temporaryPassword));
+////            organizerRepository.save(organizer);
+////            EmailDetails message = EmailDetails.builder()
+////                    .recipient(organizer.getEmail())
+////                    .subject("Email Confirmed Successfully")
+////                    .messageBody("Your temporary password is: "+ temporaryPassword +" \n " +
+////                            "kindly proceed to change your password immediately ")
+////                    .build();
+////            emailService.sendSimpleEmail(message);
+////            return ResponseEntity.ok(CustomResponse.builder()
+////                    .responseCode(ResponseUtils.ACCOUNT_CREATION_SUCCESS_CODE)
+////                    .responseMessage(ResponseUtils.ACCOUNT_CREATION_SUCCESS_MESSAGE)
+////                    .responseBody("Email Confirmed Successfully")
+////                    .build());
+////        }
+//        return ResponseEntity.badRequest().body(ResponseDto.builder()
+//              //  .responseCode(ResponseUtils.INVALID_TOKEN_CODE)
+//                //.responseMessage(ResponseUtils.INVALID_TOKEN_MESSAGE)
+//                .responseBody("Your Token is either expired or broken")
+//                .build());
+//    }
 
-//        Token token1 = tokenRepository.findByToken(token);
-//        if (token1 !=null){
-//            Admin admin = adminRepository.findByEmailIgnoreCase(token1.getAdmin().getEmail());
-////            organizer.setIsEnabled(true);
-//            String temporaryPassword = ResponseUtils.generateTemporaryPassword();
-//            organizer.setPassword(passwordEncoder.encode(temporaryPassword));
-//            organizerRepository.save(organizer);
-//            EmailDetails message = EmailDetails.builder()
-//                    .recipient(organizer.getEmail())
-//                    .subject("Email Confirmed Successfully")
-//                    .messageBody("Your temporary password is: "+ temporaryPassword +" \n " +
-//                            "kindly proceed to change your password immediately ")
-//                    .build();
-//            emailService.sendSimpleEmail(message);
-//            return ResponseEntity.ok(CustomResponse.builder()
-//                    .responseCode(ResponseUtils.ACCOUNT_CREATION_SUCCESS_CODE)
-//                    .responseMessage(ResponseUtils.ACCOUNT_CREATION_SUCCESS_MESSAGE)
-//                    .responseBody("Email Confirmed Successfully")
-//                    .build());
-//        }
-        return ResponseEntity.badRequest().body(ResponseDto.builder()
-              //  .responseCode(ResponseUtils.INVALID_TOKEN_CODE)
-                //.responseMessage(ResponseUtils.INVALID_TOKEN_MESSAGE)
-                .responseBody("Your Token is either expired or broken")
-                .build());
-    }
 
 
+//    @Override
+//    public ResponseEntity<ResponseDto> updateCredentials(Long userId, AdminUpdateRequest request) {
+//        return null;
+//    }
 
-    @Override
-    public ResponseEntity<ResponseDto> updateCredentials(Long userId, AdminUpdateRequest request) {
-        return null;
-    }
+//    @Override
+//    public ResponseEntity<?> getSingleUserById(Long userId) {
+//        return null;
+//    }
+//
+//    @Override
+//    public ResponseEntity<List<AdminResponse>> getAllOrganizer() {
+//        return null;
+//    }
 
-    @Override
-    public ResponseEntity<?> getSingleUserById(Long userId) {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<List<AdminResponse>> getAllOrganizer() {
-        return null;
-    }
-
-    @Override
-    public ResponseEntity<ResponseDto> resetPassword(LoginRequest request) {
-        return null;
-    }
+//    @Override
+//    public ResponseEntity<ResponseDto> resetPassword(LoginRequest request) {
+//        return null;
+//    }
 
     @Override
     public String register(AdminRegisterRequest adminRegisterRequest) {
@@ -246,10 +248,4 @@ public class AdminServiceImpl implements AdminService{
     }
 
 
-
-//    public static boolean patternMatches(String emailAddress, String regexPattern) {
-//        return !Pattern.compile(regexPattern)
-//                .matcher(emailAddress)
-//                .matches();
-//    }
 }

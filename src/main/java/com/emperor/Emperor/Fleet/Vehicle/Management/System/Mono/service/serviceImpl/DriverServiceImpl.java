@@ -1,4 +1,4 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.DriverEntity;
@@ -9,6 +9,7 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.Driver
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.DriverRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.RoleRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.security.config.JwtTokenProvider;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.DriverService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,7 +29,7 @@ import java.util.stream.Collectors;
 import static com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Status.NOT_ACTIVE;
 
 @Service
-public class DriverServiceImpl implements DriverService{
+public class DriverServiceImpl implements DriverService {
 
     private DriverRepository driverRepository;
    // private DriverRepository driverRepository;

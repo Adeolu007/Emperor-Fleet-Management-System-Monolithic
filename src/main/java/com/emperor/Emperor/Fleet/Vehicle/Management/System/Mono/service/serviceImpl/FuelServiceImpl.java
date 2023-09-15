@@ -1,4 +1,4 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.FuelRecordDto;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.FuelRecordResponse;
@@ -10,6 +10,7 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.Vehicl
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.FuelRecordRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.OdometerReadingRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.FuelService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,6 +1,7 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.EmailDetails;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.EmailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;

@@ -1,4 +1,4 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.MaintenanceRepairRequest;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.MaintenanceTaskResponseDto;
@@ -9,6 +9,7 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.Repair
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.VehicleNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.MaintenanceRepairRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.MaintenanceRepairService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -20,7 +21,7 @@ import java.util.stream.Collectors;
 
 @Service
 @Slf4j
-public class MaintenanceRepairServiceImpl implements MaintenanceRepairService{
+public class MaintenanceRepairServiceImpl implements MaintenanceRepairService {
     private final MaintenanceRepairRepository maintenanceRepairRepository;
     private final VehicleRepository vehicleRepository;
 

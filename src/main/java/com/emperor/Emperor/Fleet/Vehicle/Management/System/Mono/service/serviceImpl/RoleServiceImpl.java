@@ -1,10 +1,11 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RoleRequest;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.RoleResponse;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.RoleEntity;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.CustomException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.RoleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.RoleService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;

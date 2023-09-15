@@ -1,4 +1,4 @@
-package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
+package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.serviceImpl;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.DriverEntity;
@@ -7,6 +7,9 @@ import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Vehicle;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.VehicleNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.DriverRepository;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.VehicleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.DriverService;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.EmailService;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.VehicleService;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -16,7 +19,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 @Service
 @Slf4j
-public class VehicleServiceImpl implements VehicleService{
+public class VehicleServiceImpl implements VehicleService {
     private VehicleRepository vehicleRepository;
     private DriverRepository driverRepository;
     private EmailService emailService;
