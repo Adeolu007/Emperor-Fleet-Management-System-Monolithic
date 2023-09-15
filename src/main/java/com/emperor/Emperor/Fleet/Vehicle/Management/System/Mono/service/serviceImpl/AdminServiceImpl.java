@@ -24,6 +24,8 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.Collections;
 import java.util.List;
 
+import static com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Status.NOT_ACTIVE;
+
 @Service
 @Slf4j
 @AllArgsConstructor
@@ -245,6 +247,24 @@ public class AdminServiceImpl implements AdminService {
         return AuthResponse.builder()
                 .token(jwtTokenProvider.generateToken(authentication))
                 .build();
+    }
+
+    @Override
+    public ResponseEntity<ResponseDto> deleteAdmin(String licenseNumber) {
+        Admin adminToDelete = adminRepository.findByLicenseNumber(licenseNumber).orElseThrow();
+        if (adminToDelete == null || adminToDelete.getStatus()==NOT_ACTIVE) {
+            return ResponseEntity.badRequest().body(ResponseDto.builder()
+                    .responseCode(ResponseUtils.DRIVER_DOES_NOT_EXIST_CODE)
+                    .responseMessage(ResponseUtils.DRIVER_DOES_NOT_EXIST_MESSAGE)
+                    .responseBody("Sorry this admin does not exist. Please enter a valid driver License Plate")
+                    .build());  }
+        adminToDelete.setStatus(NOT_ACTIVE);
+        adminRepository.save(adminToDelete);
+        return ResponseEntity.ok(ResponseDto.builder()
+                .responseCode(ResponseUtils.DRIVER_DELETED_CODE)
+                .responseMessage(ResponseUtils.DRIVER_DELETED_MESSAGE)
+                .responseBody("Admin with license number " + adminToDelete.getLicenseNumber()+ " has been deleted")
+                .build());
     }
 
 

@@ -124,4 +124,12 @@ public class AdminController {
     public ResponseEntity<ResponseDto> getReservationById(@PathVariable Long reservationId) {
         return reservationService.getReservationById(reservationId);
     }
+
+
+
+    //DELETE ADMIN
+    @DeleteMapping()
+    public ResponseEntity<ResponseDto> deleteAdmin(@RequestParam(value = "licenseNumber") String licenseNumber) {
+        return adminService.deleteAdmin(licenseNumber);
+    }
 }

@@ -17,5 +17,5 @@ public interface AdminService {
     //
     String register (AdminRegisterRequest adminRegisterRequest);
     AuthResponse login (LoginRequest loginRequest);
- ResponseEntity<ResponseDto> deleteDriver(String licenseNumber);
+   ResponseEntity<ResponseDto> deleteAdmin(String licenseNumber);
 }
