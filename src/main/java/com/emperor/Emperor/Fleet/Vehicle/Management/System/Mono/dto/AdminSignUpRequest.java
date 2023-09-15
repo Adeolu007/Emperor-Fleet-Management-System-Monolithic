@@ -1,15 +1,13 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-@Data
+@Setter
+@Getter
 public class AdminSignUpRequest {
     private String email;
-    private String Username;
+    private String userName;
 }

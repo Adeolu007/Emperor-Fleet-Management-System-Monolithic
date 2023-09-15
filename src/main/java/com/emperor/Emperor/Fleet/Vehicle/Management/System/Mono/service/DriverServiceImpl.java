@@ -1,17 +1,19 @@
 package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service;
 
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.DriverInfo;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.DriverRegistrationRequest;
-import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.ResponseDto;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.DriverEntity;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.Status;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.DriverNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.exception.DriversNotFoundException;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.DriverRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.repository.RoleRepository;
+import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.security.config.JwtTokenProvider;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.utils.ResponseUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -21,10 +23,33 @@ import static com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.St
 
 @Service
 public class DriverServiceImpl implements DriverService{
-    public DriverServiceImpl(DriverRepository driverRepository) {
-        this.driverRepository = driverRepository;
-    }
+
     private DriverRepository driverRepository;
+   // private DriverRepository driverRepository;
+    private RoleRepository roleRepository;
+    private AuthenticationManager authenticationManager;
+    private JwtTokenProvider jwtTokenProvider;
+
+    private PasswordEncoder passwordEncoder;
+
+    public DriverServiceImpl(DriverRepository driverRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+        this.driverRepository = driverRepository;
+        this.roleRepository = roleRepository;
+        this.authenticationManager = authenticationManager;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.passwordEncoder = passwordEncoder;
+    }
+
+    @Override
+    public AuthResponse login(LoginRequest loginRequest) {
+        return null;
+    }
+
+    @Override
+    public String register(RegisterDto registerDto) {
+        return null;
+    }
+
     @Override
     public ResponseEntity<ResponseDto> getDriverByLicenseNumber(String licenseNumber) {
         if (!driverRepository.existsByLicenseNumber(licenseNumber)) {

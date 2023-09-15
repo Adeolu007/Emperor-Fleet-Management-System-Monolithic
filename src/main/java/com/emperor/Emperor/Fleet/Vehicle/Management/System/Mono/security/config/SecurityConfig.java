@@ -99,23 +99,15 @@ public class SecurityConfig {
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
         httpSecurity.csrf(AbstractHttpConfigurer::disable)
+                .cors(Customizer.withDefaults())
                 .authorizeHttpRequests(authorize ->
                         authorize
-//                                .requestMatchers("/api/v1/auth/**").permitAll()
-                                .requestMatchers("/api/v1/auth/register").permitAll()
-                                .requestMatchers("/api/v1/auth/login").permitAll()
-                                .requestMatchers("/api/drivers/**").permitAll()
-                                .requestMatchers("/api/admin/**").permitAll()
-                                .requestMatchers("/api/drivers/reservation").permitAll()
-                                .requestMatchers("/api/admin/change-driver/**").permitAll()
-                                .requestMatchers("/api/v1/monify/**").permitAll()
-                                .requestMatchers(UNSECURED_ATTENDEE_END_POINTS).permitAll()
-                                .requestMatchers(UNSECURED_ADMIN_END_POINTS).permitAll()
-                                .requestMatchers(SECURED_ADMIN_END_POINTS).hasRole("ADMIN")
-                                .requestMatchers(SECURED_ORGANIZER_END_POINTS).hasRole("ORGANIZER")
-                                .requestMatchers(SECURED_ATTENDEE_END_POINTS).hasRole("ATTENDEE")
-//                                .requestMatchers("/api/identity/attendee/single/attendee/email").permitAll()
-//                                .requestMatchers("api/identity/attendee/single/**").hasRole("ATTENDEE")
+                                .requestMatchers("api/**").permitAll()
+                                .requestMatchers("/api/admin/login").authenticated()
+                                .requestMatchers("/api/v1/auth/login").authenticated()
+                                .requestMatchers("/api/drivers/**").hasAnyRole("DRIVER", "ADMIN")
+                                .requestMatchers("/api/admin").hasRole("ADMIN").anyRequest().authenticated()
+
                                 .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

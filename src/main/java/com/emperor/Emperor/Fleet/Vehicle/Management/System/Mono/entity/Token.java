@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.UUID;
 
@@ -24,7 +25,7 @@ public class Token {
     private String token;
 
     @CreationTimestamp
-    private Date createdAt;
+    private LocalDateTime createdAt;
 
     @OneToOne(targetEntity = Admin.class, fetch = FetchType.EAGER)
     @JoinColumn(nullable = false,name = "admin_id")
@@ -32,7 +33,7 @@ public class Token {
 
     public Token(Admin admin){
         this.admin=admin;
-        createdAt = new Date();
+        createdAt = LocalDateTime.now();
         token = UUID.randomUUID().toString();
     }
 

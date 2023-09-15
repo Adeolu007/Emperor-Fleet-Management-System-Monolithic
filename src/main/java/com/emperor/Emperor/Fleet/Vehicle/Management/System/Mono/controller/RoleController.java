@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @AllArgsConstructor
 @RequestMapping("api/v1/role")
-public class TestController {
+public class RoleController {
     private final RoleService roleService;
 
     @PostMapping

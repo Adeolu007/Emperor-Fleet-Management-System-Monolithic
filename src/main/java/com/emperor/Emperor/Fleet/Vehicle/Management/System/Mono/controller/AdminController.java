@@ -2,6 +2,7 @@ package com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.controller;
 
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.dto.*;
 import com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.service.*;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -14,14 +15,36 @@ public class AdminController {
     private final FuelService fuelService;
     private final MaintenanceRepairService maintenanceRepairService;
     private final ReservationService reservationService;
+    private final AdminService adminService;
 
-    public AdminController(DriverService driverService, VehicleService vehicleService, FuelService fuelService, MaintenanceRepairService maintenanceRepairService, ReservationService reservationService) {
+
+    public AdminController(DriverService driverService, VehicleService vehicleService, FuelService fuelService, MaintenanceRepairService maintenanceRepairService, ReservationService reservationService, AdminService adminService) {
         this.driverService = driverService;
         this.vehicleService = vehicleService;
         this.fuelService = fuelService;
         this.maintenanceRepairService = maintenanceRepairService;
         this.reservationService = reservationService;
+        this.adminService=adminService;
     }
+
+//    @PostMapping("/signup")
+//    @ResponseStatus(HttpStatus.CREATED)
+//    public ResponseEntity<ResponseDto> signUp(AdminSignUpRequest request) {
+//        return adminService.signUp(request);
+//    }
+
+    @PostMapping("/signup")
+    @ResponseStatus(HttpStatus.CREATED)
+public String register(@RequestBody AdminRegisterRequest adminRegisterRequest) {
+        return adminService.register(adminRegisterRequest);
+}
+
+    @PostMapping("/login")
+    public AuthResponse login(@RequestBody LoginRequest loginRequest) {
+        return adminService.login(loginRequest);
+    }
+
+    ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
     @GetMapping
     public ResponseEntity<List<DriverInfo>> getAllDrivers() {

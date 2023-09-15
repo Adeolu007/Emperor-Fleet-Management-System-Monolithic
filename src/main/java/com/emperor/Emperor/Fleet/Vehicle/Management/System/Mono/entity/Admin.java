@@ -16,9 +16,10 @@ public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    private String firstName;
     private String lastName;
     private String otherName;
-    private String username;
+    private String userName;
     @Column(unique = true)
     private String email;
     private String licenseNumber;

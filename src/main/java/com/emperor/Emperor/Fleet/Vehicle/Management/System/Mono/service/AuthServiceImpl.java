@@ -35,7 +35,8 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse login(LoginRequest loginRequest) {
-        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword()));
+
+        Authentication authentication = authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(loginRequest.getEmail(), loginRequest.getPassword()));
         SecurityContextHolder.getContext().setAuthentication(authentication);
         return AuthResponse.builder()
                 .token(jwtTokenProvider.generateToken(authentication))
@@ -45,7 +46,6 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public String register(RegisterDto registerDto) {
-
         if (driverRepository.existByUsernameOrEmail(registerDto.getUsername(), registerDto.getEmail())) {
             return "Username or Email is already taken";
         }
