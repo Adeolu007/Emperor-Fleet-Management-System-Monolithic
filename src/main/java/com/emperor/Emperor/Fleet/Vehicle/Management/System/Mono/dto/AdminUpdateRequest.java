@@ -18,5 +18,5 @@ public class AdminUpdateRequest {
     private String otherName;
     private String phoneNumber;
     private String address;
-    private String password;
+    private String licenseNumber;
 }

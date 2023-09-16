@@ -18,4 +18,5 @@ public interface AdminService {
     String register (AdminRegisterRequest adminRegisterRequest);
     AuthResponse login (LoginRequest loginRequest);
    ResponseEntity<ResponseDto> deleteAdmin(String licenseNumber);
+    //ResponseEntity<ResponseDto> updateCredentials(AdminUpdateRequest request);
 }

@@ -30,13 +30,10 @@ import static com.emperor.Emperor.Fleet.Vehicle.Management.System.Mono.entity.St
 
 @Service
 public class DriverServiceImpl implements DriverService {
-
     private DriverRepository driverRepository;
-   // private DriverRepository driverRepository;
     private RoleRepository roleRepository;
     private AuthenticationManager authenticationManager;
     private JwtTokenProvider jwtTokenProvider;
-
     private PasswordEncoder passwordEncoder;
 
     public DriverServiceImpl(DriverRepository driverRepository, RoleRepository roleRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
@@ -100,8 +97,6 @@ public class DriverServiceImpl implements DriverService {
                                 .email(driverProfile.getEmail()).build())
                 .build());
     }
-
-
     @Override
     public ResponseEntity<List<DriverInfo>> getAllDrivers()  {
         List<DriverInfo> driverInfos = driverRepository.findAll().stream()
@@ -113,26 +108,20 @@ public class DriverServiceImpl implements DriverService {
                         .email(driver.getEmail())
                         .build())
                 .collect(Collectors.toList());
-
         if (driverInfos.isEmpty()) {
             throw new DriversNotFoundException("No active drivers found");
         }
-
         return new ResponseEntity<>(driverInfos, HttpStatus.OK);
     }
-
     @Override
     public ResponseEntity<ResponseDto> updateDriver(DriverRegistrationRequest driverRegistration) {
         DriverEntity driverProfile = driverRepository.findByLicenseNumber(driverRegistration.getLicenseNumber()).orElseThrow(() -> new DriverNotFoundException("Driver with license number " + driverRegistration.getLicenseNumber() + " not found"));
-
         if (driverProfile == null) {
-
             return ResponseEntity.badRequest().body(ResponseDto.builder()
                     .responseCode(ResponseUtils.DRIVER_DOES_NOT_EXIST_CODE)
                     .responseMessage(ResponseUtils.DRIVER_DOES_NOT_EXIST_MESSAGE)
                     .responseBody("Sorry this driver does not exist. Please enter a valid driver License Plate")
                     .build());  }
-
         driverProfile.setFirstName(driverRegistration.getFirstName());
         driverProfile.setLastName(driverRegistration.getLastName());
         driverProfile.setAddress(driverRegistration.getAddress());

@@ -132,4 +132,11 @@ public class AdminController {
     public ResponseEntity<ResponseDto> deleteAdmin(@RequestParam(value = "licenseNumber") String licenseNumber) {
         return adminService.deleteAdmin(licenseNumber);
     }
+
+
+    //UPDATE ADMIN
+//    @GetMapping("/admin-update")
+//    public ResponseEntity<ResponseDto> updateCredentials( AdminUpdateRequest request) {
+//       return adminService.updateCredentials(request);
+//    }
 }

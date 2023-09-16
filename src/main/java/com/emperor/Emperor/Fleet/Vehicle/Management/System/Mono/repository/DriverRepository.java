@@ -9,7 +9,7 @@ import java.util.Optional;
 
 public interface DriverRepository extends JpaRepository<DriverEntity, Long> {
     @Query("select d from DriverEntity d where d.username = ?1")
-    Optional<DriverEntity> findDriverByUsernameOrEmail(String username);
+  //  Optional<DriverEntity> findDriverByUsernameOrEmail(String username);
 
 
 //    Boolean existByUsername(String username);
@@ -31,8 +31,8 @@ public interface DriverRepository extends JpaRepository<DriverEntity, Long> {
 
    // Optional<DriverEntity> findByUsernameOrEmail(String username, String email);
 
-    @Query("select d from DriverEntity d where d.username = ?1 or d.email = ?2")
-    Optional<DriverEntity> findByTheDriverUsernameOrEmail(String username, String email);
+ //   @Query("select d from DriverEntity d where d.username = ?1 or d.email = ?2")
+  //  Optional<DriverEntity> findByTheDriverUsernameOrEmail(String username, String email);
 
     @Query("select (count(d) > 0) from DriverEntity d where d.username = ?1 or d.email = ?2")
     boolean existByUsernameOrEmail(String username, String email);

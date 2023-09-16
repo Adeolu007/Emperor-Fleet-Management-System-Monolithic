@@ -13,10 +13,10 @@ public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
     @Query("select v from Vehicle v where v.licensePlate = ?1")
     Vehicle findByLicensePlate(String licensePlate);
 
-    @Transactional
-    @Modifying
-    @Query("delete from Vehicle v where v.licensePlate = ?1")
-    int deleteByLicensePlate(String licensePlate);
+//    @Transactional
+//    @Modifying
+//    @Query("delete from Vehicle v where v.licensePlate = ?1")
+//    int deleteByLicensePlate(String licensePlate);
 
 
 

@@ -9,13 +9,13 @@ import java.util.Optional;
 public interface AdminRepository extends JpaRepository<Admin,Long> {
     boolean existsByEmail(String email);
 
-    boolean existsByPassword(String password);
+ //   boolean existsByPassword(String password);
 
     Optional<Admin> findByEmail(String email);
 
-    Admin findByEmailIgnoreCase(String email);
+ //   Admin findByEmailIgnoreCase(String email);
 
-    boolean existsByUserNameOrPassword(String userName, String password);
+ //   boolean existsByUserNameOrPassword(String userName, String password);
 
     @Query("select a from Admin a where a.licenseNumber = ?1")
     Optional<Admin> findByLicenseNumber(String licenseNumber);

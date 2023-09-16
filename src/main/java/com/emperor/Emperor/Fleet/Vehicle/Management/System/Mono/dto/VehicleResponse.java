@@ -12,10 +12,7 @@ import java.util.Date;
 public class VehicleResponse {
     private String make;
     private String model;
-//    private int year;
     private String licensePlate;
-//    private Date registrationDate;
-//    private Date acquisitionDate;
     private String description;
     private String fuelCapacity;
 
